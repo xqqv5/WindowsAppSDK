@@ -45,13 +45,6 @@ resources:
       ref: $(SamplesBranch)
 
 stages:
-- template: AzurePipelinesTemplates\WindowsAppSDK-BuildSampleApps-Stage.yml@self
-  parameters:
-    BuildSampleApps: ${{ parameters.BuildSampleApps }}
-    TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
-    runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
-    maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
-    
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildInstaller-Stage.yml@self
 
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildVSIX-Stage.yml@self
@@ -80,3 +73,10 @@ stages:
     PublishPackage: false
     IsOneBranch: false
     BuildMockWindowsAppSDK: false
+
+- template: AzurePipelinesTemplates\WindowsAppSDK-BuildSampleApps-Stage.yml@self
+  parameters:
+    BuildSampleApps: ${{ parameters.BuildSampleApps }}
+    TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
+    runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
+    maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
