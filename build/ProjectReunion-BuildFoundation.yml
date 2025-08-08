@@ -47,6 +47,7 @@ resources:
 stages:
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildSampleApps-Stage.yml@self
   parameters:
+    IsOneBranch: false
     BuildSampleApps: ${{ parameters.BuildSampleApps }}
     TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
     runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
