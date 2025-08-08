@@ -10,6 +10,9 @@
 # $(SamplesBranch) is the release branch
 # and is set in build\AzurePipelinesTemplates\WindowsAppSDK-CommonVariables.yml
 parameters:
+- name: "IsOneBranch"
+  type: boolean
+  default: true
 - name: JobName
   type: string
   default: 'SamplesCompatTest'

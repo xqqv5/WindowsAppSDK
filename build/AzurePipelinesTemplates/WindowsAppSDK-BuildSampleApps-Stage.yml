@@ -94,6 +94,7 @@ stages:
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
     parameters:
+      IsOneBranch: ${{ parameters.IsOneBranch }}
       JobName: "SamplesCompatTest"
       FeatureAreas: ${{ parameters.sampleFeatureAreasList.SamplesCompatTest }}
       BuildConfig:
