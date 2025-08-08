@@ -90,7 +90,7 @@ stages:
 - stage: BuildSampleApps_x64
   condition: and(succeeded(), eq(${{ parameters.BuildSampleApps }}, true))
   variables:
-    SamplesRepoName: 'WindowsAppSDKSamples'
+    SamplesRepoName: 'WindowsAppSDK-Samples'
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
     parameters:
