@@ -20,6 +20,18 @@ name: $(version)
 trigger: none
 
 parameters: # parameters are shown up in ADO UI in a build queue time
+- name: "BuildSampleApps"
+  displayName: "Test build of sample apps"
+  type: boolean
+  default: false
+- name: "TestSampleAppsAfterBuildStage"
+  displayName: "Test launch of Sample apps separately in the TestSampleApps Stage"
+  type: boolean
+  default: true
+- name: maxParallelForBuildSamplesCompatJob_x64
+  displayName: "Maximum number of parallel runs for Samples Compat Tests on platform x64"
+  type: number
+  default: 13     # comparing with Nightly and Official build, PR build may have several build running at same time. Need to reduce max parallel to avoid exceeding
 - name: runStaticAnalysis
   displayName: "Run Static Analysis (e.g., PREFast, APIScan)"
   type: boolean
@@ -44,6 +56,11 @@ resources:
       type: git
       name: ProjectReunion/WindowsAppSDKConfig
       ref: refs/heads/main
+    - repository: WindowsAppSDKSamples
+      type: github
+      endpoint: 'GitHub - benkuhn - 2-18'
+      name: microsoft/WindowsAppSDK-Samples
+      ref: $(SamplesBranch)
 
 extends:
   template: v2/Microsoft.NonOfficial.yml@templates # https://aka.ms/obpipelines/templates
@@ -90,6 +107,13 @@ extends:
         break: false
 
     stages:
+    - template: AzurePipelinesTemplates\WindowsAppSDK-BuildSampleApps-Stage.yml@self
+      parameters:
+        BuildSampleApps: ${{ parameters.BuildSampleApps }}
+        TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
+        runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
+        maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
+        
     - template: AzurePipelinesTemplates\WindowsAppSDK-Build-Stage.yml@self
       parameters:
         SignOutput: false
