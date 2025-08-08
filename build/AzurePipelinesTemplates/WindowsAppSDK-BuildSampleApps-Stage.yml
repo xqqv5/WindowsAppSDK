@@ -1,0 +1,107 @@
+parameters:
+  - name: BuildSampleApps
+    type: boolean
+    default: true
+  - name: TestSampleAppsAfterBuildStage
+    displayName: "Test launch of Sample apps separately in the TestSampleApps Stage"
+    type: boolean
+    default: true
+  - name: SamplesBuildOutputArtifactName
+    displayName: "Base name for Samples build output artifacts"
+    type: string
+    default: 'SamplesBuildOutput'
+  - name: runStaticAnalysis
+    type: boolean
+    default: true
+  - name: maxParallel_x64
+    type: number
+    default: 10
+  # Each featureArea listed below is being built by a separate job agent, producing one corresponding test artifact.
+  # Because large artifacts (e.g., 5+GB) seems to hit "Out of Memory" error more frequently during artifact download, we sometimes
+  # split one featureArea artifact into smaller artifacts, usually <featureArea-A>-cs to group C# sample apps into one artifact,
+  # and <featureArea-A>-cpp to group C++ sample apps into another artifact. When a *-cs artifact is still too big, we then
+  # split it further using the pattern *-cs,  *-cs1, *-cs2, etc.
+  # As soon as large artifacts are no longer hitting the "Out of Memory" error during download, we can recombine all
+  # <featureArea-A>-* artifacts into a single large <featureArea-A> artifact.
+  # See the comment block below where these groups are being used.
+  - name: "sampleFeatureAreasList"
+    type: object
+    default:
+      # These featureAreas are currently being built for [x64 | arm64] x [Release | Debug].
+      SamplesCompatTest:
+      - 'DeploymentManager'
+      - 'Installer'
+      - 'PhotoEditor'
+      - 'TextRendering'
+      - 'Unpackaged'
+      # - 'CustomControls' [regressed with CoreWebView2 refactor - temporarily disable to unblock build]
+      - 'Notifications'
+      - 'Widgets'
+      - 'Composition'
+      - 'Insights'
+      # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
+      # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
+      # we need to use the feature name in file paths later. For instance:
+      # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
+      # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
+      # by doubling it up as "--".
+      - 'AppLifecycle-Activation-cpp'
+      - 'AppLifecycle-Activation-cs'
+      - 'AppLifecycle-Activation-cs1'
+      - 'AppLifecycle-Activation-cs2'
+      - 'AppLifecycle-Instancing-cpp'
+      - 'AppLifecycle-Instancing-cs'
+      - 'AppLifecycle-Instancing-cs1'
+      - 'AppLifecycle-Instancing-cs2'
+      - 'AppLifecycle-StateNotifications-cpp'
+      - 'AppLifecycle-StateNotifications-cs'
+      - 'AppLifecycle-StateNotifications-cs1'
+      - 'AppLifecycle-StateNotifications-cs2'
+      - 'AppLifecycle-EnvironmentVariables'
+      - 'AppLifecycle-Restart'
+      - 'AppLifecycle-RestartRegistration'
+      - 'AppLifecycle-ShareTarget'
+      - 'CameraCaptureUI'
+      - 'ResourceManagement-cpp'
+      - 'ResourceManagement-cs'
+      - 'ResourceManagement-cs1'
+      - 'Input'
+      - 'Mica'
+      - 'Windowing-cpp'
+      - 'Windowing-cs'
+      - 'Windowing-cs1'
+      - 'SelfContainedDeployment-cpp'
+      - 'SelfContainedDeployment-cs'
+      - 'SelfContainedDeployment-cs1'
+      - 'SelfContainedDeployment-cs2'
+      # - 'WindowsAIFoundry-cpp--console--unpackaged' [disabled currently as build pipeline does not support cmake build]
+      # - 'WindowsAIFoundry-cs--maui' [disabled currently as build pipeline does not have required workloads for building]
+      - 'WindowsAIFoundry-cs--Winforms--Pckg'
+      - 'WindowsAIFoundry-cs--Winforms--Sparse'
+      - 'WindowsAIFoundry-cs--WinUI'
+      - 'WindowsAIFoundry-cs--Wpf'
+      # - 'WindowsAIFoundry-Cs--Wpf--Dotnet' [disabled currently as build pipeline cannot support .net9 projects]
+      - 'WindowsAIFoundry-cs--Wpf--Sparse'
+
+stages:
+- stage: BuildSampleApps_x64
+  # dependsOn: Pack
+  condition: and(succeeded(), eq(${{ parameters.BuildSampleApps }}, true))
+  jobs:
+  - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
+    parameters:
+      JobName: "SamplesCompatTest"
+      FeatureAreas: ${{ parameters.sampleFeatureAreasList.SamplesCompatTest }}
+      BuildConfig:
+      - 'Release'
+      - 'Debug'
+      BuildPlatform:
+      - 'x64'
+      # Specify a valid sample artifact name to trigger publishing if we will run SampleTests in any stage; otherwise,
+      # specify an invalid artifact name to skip publishing.
+      ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), eq(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+        SamplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64
+      ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), ne(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+        SamplesArtifactName: ''
+      runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
+      maxParallel: ${{ parameters.maxParallel_x64 }}
