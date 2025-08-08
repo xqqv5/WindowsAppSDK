@@ -85,7 +85,6 @@ parameters:
 
 stages:
 - stage: BuildSampleApps_x64
-  # dependsOn: Pack
   condition: and(succeeded(), eq(${{ parameters.BuildSampleApps }}, true))
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
