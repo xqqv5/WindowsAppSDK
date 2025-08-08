@@ -1,4 +1,7 @@
 parameters:
+  - name: "IsOneBranch"
+    type: boolean
+    default: true
   - name: BuildSampleApps
     type: boolean
     default: true
