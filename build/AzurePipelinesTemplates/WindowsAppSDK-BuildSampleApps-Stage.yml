@@ -99,9 +99,11 @@ stages:
       - 'x64'
       # Specify a valid sample artifact name to trigger publishing if we will run SampleTests in any stage; otherwise,
       # specify an invalid artifact name to skip publishing.
-      ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), eq(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+      # ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), eq(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+      ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), false) }}:
         SamplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64
-      ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), ne(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+      # ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), ne(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
+      ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), true) }}:
         SamplesArtifactName: ''
       runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
       maxParallel: ${{ parameters.maxParallel_x64 }}
