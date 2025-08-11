@@ -161,7 +161,7 @@ jobs:
       packageType: 'sdk'
       useGlobalJson: true
       performMultiLevelLookup: true
-      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK'
+      workingDirectory: '$(Build.SourcesDirectory)/WindowsAppSDK'
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
