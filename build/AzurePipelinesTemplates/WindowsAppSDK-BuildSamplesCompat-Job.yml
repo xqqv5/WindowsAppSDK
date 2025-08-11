@@ -148,31 +148,31 @@ jobs:
   #       -WinAppSDKVersion "$(WindowsAppSDKPackageVersion)"
   #       -NuGetPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
   
-  # # this task is used to update the nuget.config file to point to the internal feed
-  # - powershell: |
-  #     $nugetConfigPath = "$(Build.SourcesDirectory)/$(SamplesRepoName)/Samples/nuget.config"
+  # this task is used to update the nuget.config file to point to the internal feed
+  - powershell: |
+      $nugetConfigPath = "$(Build.SourcesDirectory)/$(SamplesRepoName)/Samples/nuget.config"
   
-  #     $sourceName = "WinAppSDK-SampleDeps"
-  #     $newSourceUrl = "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+      $sourceName = "WinAppSDK-SampleDeps"
+      $newSourceUrl = "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
   
-  #     if (Test-Path $nugetConfigPath) {
-  #         [xml]$config = Get-Content $nugetConfigPath
+      if (Test-Path $nugetConfigPath) {
+          [xml]$config = Get-Content $nugetConfigPath
   
-  #         $packageSources = $config.configuration.packageSources.add
+          $packageSources = $config.configuration.packageSources.add
   
-  #         $existingSource = $packageSources | Where-Object { $_.key -eq $sourceName }
+          $existingSource = $packageSources | Where-Object { $_.key -eq $sourceName }
   
-  #         if ($existingSource) {
-  #             $existingSource.value = $newSourceUrl
-  #             Write-Host "Updated source '$sourceName' to '$newSourceUrl'"
+          if ($existingSource) {
+              $existingSource.value = $newSourceUrl
+              Write-Host "Updated source '$sourceName' to '$newSourceUrl'"
                 
-  #             $config.Save($nugetConfigPath)
-  #             Write-Host "nuget.config updated successfully."
-  #         } 
-  #     } else {
-  #         Write-Host "nuget.config file does not exist."
-  #     }
-  #   displayName: 'Modify NuGet.config feed to internal feed'
+              $config.Save($nugetConfigPath)
+              Write-Host "nuget.config updated successfully."
+          } 
+      } else {
+          Write-Host "nuget.config file does not exist."
+      }
+    displayName: 'Modify NuGet.config feed to internal feed'
 
     # Used to restore Windows SDK projection preview package from MSFTNuGet feed
   - task: NuGetAuthenticate@1
