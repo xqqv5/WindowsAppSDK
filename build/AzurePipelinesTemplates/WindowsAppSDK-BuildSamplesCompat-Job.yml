@@ -98,6 +98,17 @@ jobs:
         Write-Host "##vso[task.setvariable variable=featureForFilePath;isOutput=true]$tempFeature"
         Write-Host "##vso[task.setvariable variable=featureForFilePath;]$tempFeature"
 
+  # The following steps are used to prepare the environment for building Sample apps.
+  - powershell: |
+      $folderPath = "$(Build.SourcesDirectory)\localpackages\NugetPackages"
+      if (-not (Test-Path $folderPath)) {
+          New-Item -ItemType Directory -Path $folderPath | Out-Null
+          Write-Host "Folder created: $folderPath"
+      } else {
+          Write-Host "Folder already exists: $folderPath"
+      }
+    displayName: "Check and create folder (PowerShell)"
+
   # - task: DownloadPipelineArtifact@2
   #   displayName: 'Download WindowsAppSDK'
   #   inputs:
