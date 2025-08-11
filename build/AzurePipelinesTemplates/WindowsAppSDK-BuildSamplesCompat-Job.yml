@@ -75,7 +75,6 @@ jobs:
 
   steps:
   - checkout: self
-    path: s
   - checkout: WindowsAppSDKSamples
 
   - powershell: |
@@ -162,6 +161,7 @@ jobs:
       packageType: 'sdk'
       useGlobalJson: true
       performMultiLevelLookup: true
+      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK'
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
