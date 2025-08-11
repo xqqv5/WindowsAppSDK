@@ -75,7 +75,6 @@ jobs:
 
   steps:
   - checkout: self
-    path: s
   - checkout: WindowsAppSDKSamples
 
   # Local variable 'feature' used to potentially contain a '\' and that is handy when using
