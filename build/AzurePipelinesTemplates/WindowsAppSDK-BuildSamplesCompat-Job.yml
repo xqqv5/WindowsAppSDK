@@ -75,6 +75,7 @@ jobs:
 
   steps:
   - checkout: self
+    path: s
   - checkout: WindowsAppSDKSamples
 
   - powershell: |
