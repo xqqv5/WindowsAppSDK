@@ -75,6 +75,7 @@ jobs:
 
   steps:
   - checkout: self
+    path: s
   - checkout: WindowsAppSDKSamples
 
   # Local variable 'feature' used to potentially contain a '\' and that is handy when using
@@ -137,8 +138,9 @@ jobs:
   - task: UseDotNet@2
     displayName: Use .NET Core SDK 6
     inputs:
-      version: 6.0.427
       packageType: 'sdk'
+      useGlobalJson: true
+      performMultiLevelLookup: true
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
