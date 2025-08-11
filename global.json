@@ -3,9 +3,10 @@
     "dotnet": "6.0.427"
   },
   "sdk": {
-    "version": "6.0.427"
+    "version": "6.0.427",
+    "rollForward": "latestMajor"
   },
   "msbuild-sdks": {
-    "Microsoft.WinAppSDK.EngCommon": "1.6.240418"
+    "Microsoft.WinAppSDK.EngCommon": "1.5.230711"
   }
 }
