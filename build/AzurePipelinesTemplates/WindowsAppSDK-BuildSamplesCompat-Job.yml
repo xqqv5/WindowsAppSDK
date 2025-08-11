@@ -162,7 +162,7 @@ jobs:
     inputs:
       packageType: 'sdk'
       useGlobalJson: true
-      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK'
+      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK\test'
       # performMultiLevelLookup: true
 
   # - task: PowerShell@2
