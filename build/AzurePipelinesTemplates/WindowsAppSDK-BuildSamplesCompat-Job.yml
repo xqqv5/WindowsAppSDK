@@ -77,6 +77,10 @@ jobs:
   - checkout: self
   - checkout: WindowsAppSDKSamples
 
+  - powershell: |
+      # This script is used to echo the system.DefaultWorkingDirectory and list all its subdirectories and contents formated as a tree.
+      Get-ChildItem -Path "$(System.DefaultWorkingDirectory)" -Recurse | Format-List
+
   # Local variable 'feature' used to potentially contain a '\' and that is handy when using
   # 'feature' as part of a file path. However, when we started using 'feature' as part of
   # the name of an artifact in OneBranch, the '\' is an illegal character in an artifact
@@ -145,11 +149,18 @@ jobs:
     displayName: 'Retrieve VC tools directory'
   #====================================================================================================================
 
+  # - task: UseDotNet@2
+  #   displayName: Use .NET Core SDK 6
+  #   inputs:
+  #     packageType: 'sdk'
+  #     version: '6.0.427'
+
   - task: UseDotNet@2
     displayName: Use .NET Core SDK 6
     inputs:
       packageType: 'sdk'
-      version: '6.0.427'
+      useGlobalJson: true
+      performMultiLevelLookup: true
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
