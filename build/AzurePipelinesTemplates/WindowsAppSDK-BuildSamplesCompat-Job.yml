@@ -78,6 +78,8 @@ jobs:
   - checkout: WindowsAppSDKSamples
 
   - powershell: |
+      Write-Host "System.DefaultWorkingDirectory: $(System.DefaultWorkingDirectory)"
+      Write-Host "Build.SourcesDirectory: $(Build.SourcesDirectory)"
       # This script is used to echo the system.DefaultWorkingDirectory and list all its subdirectories and contents formated as a tree.
       Get-ChildItem -Path "$(System.DefaultWorkingDirectory)" -Recurse | Format-List
 
@@ -161,7 +163,7 @@ jobs:
       packageType: 'sdk'
       useGlobalJson: true
       performMultiLevelLookup: true
-      workingDirectory: '$(Build.SourcesDirectory)/WindowsAppSDK'
+      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK'
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
