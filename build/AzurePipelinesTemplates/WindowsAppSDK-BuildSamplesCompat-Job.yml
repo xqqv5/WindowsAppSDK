@@ -151,19 +151,19 @@ jobs:
     displayName: 'Retrieve VC tools directory'
   #====================================================================================================================
 
-  # - task: UseDotNet@2
-  #   displayName: Use .NET Core SDK 6
-  #   inputs:
-  #     packageType: 'sdk'
-  #     version: '6.0.427'
-
   - task: UseDotNet@2
     displayName: Use .NET Core SDK 6
     inputs:
       packageType: 'sdk'
-      useGlobalJson: true
-      performMultiLevelLookup: true
-      workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK\test'
+      version: '6.0.427'
+
+  # - task: UseDotNet@2
+  #   displayName: Use .NET Core SDK 6
+  #   inputs:
+  #     packageType: 'sdk'
+  #     useGlobalJson: true
+  #     performMultiLevelLookup: true
+  #     workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK\test'
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
