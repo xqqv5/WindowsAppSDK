@@ -75,7 +75,6 @@ jobs:
 
   steps:
   - checkout: self
-    path: s
   - checkout: WindowsAppSDKSamples
 
   # The MMS2022 image used to come with Windows SDK 10.0.22000, but not any more.
@@ -85,16 +84,10 @@ jobs:
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)
     inputs:
       targetType: filePath
-      filePath: $(Build.SourcesDirectory)\build\scripts\windows-sdk.ps1
+      filePath: $(Build.SourcesDirectory)\$(Build.Repository.Name)\build\scripts\windows-sdk.ps1
       # TODO: the SdkVersion parameter does not yet support arbitrary versions.
       arguments: >
         -SdkVersion "10.0.22000"
-
-  - powershell: |
-      Write-Host "System.DefaultWorkingDirectory: $(System.DefaultWorkingDirectory)"
-      Write-Host "Build.SourcesDirectory: $(Build.SourcesDirectory)"
-      # This script is used to echo the system.DefaultWorkingDirectory and list all its subdirectories and contents formated as a tree.
-      Get-ChildItem -Path "$(System.DefaultWorkingDirectory)" -Recurse | Format-List
 
   # Local variable 'feature' used to potentially contain a '\' and that is handy when using
   # 'feature' as part of a file path. However, when we started using 'feature' as part of
@@ -126,7 +119,7 @@ jobs:
       } else {
           Write-Host "Folder already exists: $folderPath"
       }
-    displayName: "Check and create folder (PowerShell)"
+    displayName: "Check and create folder for NuGet packages"
 
   # - task: DownloadPipelineArtifact@2
   #   displayName: 'Download WindowsAppSDK'
@@ -162,8 +155,10 @@ jobs:
       echo VCToolsInstallDir = %VCToolsInstallDir%
       echo ##vso[task.setvariable variable=VCToolsInstallDir]%VCToolsInstallDir%
     displayName: 'Retrieve VC tools directory'
-  #====================================================================================================================
 
+  # In Aggregator, we use global.json to specify the .NET SDK version to use.
+  # However, in Foundation it encounters error when using global.json, so we specify the version and call UseDotNet@2 multiple times instead.
+  #====================================================================================================================
   - task: UseDotNet@2
     displayName: Use .NET Core SDK 6
     inputs:
@@ -181,14 +176,7 @@ jobs:
     inputs:
       packageType: 'sdk'
       version: '9.0.200'
-
-  # - task: UseDotNet@2
-  #   displayName: Use .NET Core SDK 6
-  #   inputs:
-  #     packageType: 'sdk'
-  #     useGlobalJson: true
-  #     performMultiLevelLookup: true
-  #     workingDirectory: '$(Build.SourcesDirectory)\WindowsAppSDK\test'
+  #====================================================================================================================
 
   # - task: PowerShell@2
   #   displayName: UpdateVersions
@@ -224,7 +212,7 @@ jobs:
       }
     displayName: 'Modify NuGet.config feed to internal feed'
 
-    # Used to restore Windows SDK projection preview package from MSFTNuGet feed
+  # Used to restore Windows SDK projection preview package from MSFTNuGet feed
   - task: NuGetAuthenticate@1
     displayName: "NuGet authenticate to restore Windows SDK projection"
 
