@@ -80,4 +80,3 @@ stages:
     SignOutput: false
     PublishPackage: false
     IsOneBranch: false
-    BuildMockWindowsAppSDK: false
