@@ -84,7 +84,7 @@ jobs:
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)
     inputs:
       targetType: filePath
-      filePath: $(Build.SourcesDirectory)\WindowsAppSDK\build\scripts\windows-sdk.ps1
+      filePath: $(Build.SourcesDirectory)\$(SelfRepoName)\build\scripts\windows-sdk.ps1
       # TODO: the SdkVersion parameter does not yet support arbitrary versions.
       arguments: >
         -SdkVersion "10.0.22000"
@@ -136,15 +136,24 @@ jobs:
   #       *.nupkg
   #     TargetFolder: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages'
 
-  # - task: NuGetCommand@2
-  #   inputs:
-  #     command: 'custom'
-  #     arguments: >
-  #       install "Microsoft.WindowsAppSDK"
-  #       -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
-  #       -Version "$(WindowsAppSDKPackageVersion)"
-  #       -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
-  #       -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+  # Install NuGet package to get all its dependencies.
+  - task: NuGetCommand@2
+    inputs:
+      command: 'custom'
+      arguments: >
+        install "Microsoft.WindowsAppSDK.Foundation"
+        -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
+        -Version "1.8.250811014-experimental"
+        -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
+        -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+
+  # run the Show-FolderTree.ps1 at build\Scripts
+  - task: PowerShell@2
+    displayName: 'Show folder tree'
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\Show-FolderTree.ps1'
+      arguments: '-FolderPath "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"'
 
   # The environment variable VCToolsInstallDir isn't defined on lab machines, so we need to retrieve it ourselves.
   - script: |

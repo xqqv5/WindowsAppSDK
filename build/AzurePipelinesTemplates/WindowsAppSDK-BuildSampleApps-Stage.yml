@@ -91,6 +91,7 @@ stages:
   condition: and(succeeded(), eq(${{ parameters.BuildSampleApps }}, true))
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
+    SelfRepoName: 'WindowsAppSDK'
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
     parameters:
