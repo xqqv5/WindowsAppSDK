@@ -84,7 +84,7 @@ jobs:
       SYSTEM_ACCESSTOKEN: $(System.AccessToken)
     inputs:
       targetType: filePath
-      filePath: $(Build.SourcesDirectory)\$(Build.Repository.Name)\build\scripts\windows-sdk.ps1
+      filePath: $(Build.SourcesDirectory)\WindowsAppSDK\build\scripts\windows-sdk.ps1
       # TODO: the SdkVersion parameter does not yet support arbitrary versions.
       arguments: >
         -SdkVersion "10.0.22000"
