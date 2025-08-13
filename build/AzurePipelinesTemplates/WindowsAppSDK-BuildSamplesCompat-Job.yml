@@ -136,7 +136,7 @@ jobs:
   #       *.nupkg
   #     TargetFolder: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages'
 
-  # Install NuGet package to get all its dependencies.
+  # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies.
   - task: NuGetCommand@2
     inputs:
       command: 'custom'
@@ -146,6 +146,17 @@ jobs:
         -Version "1.8.250811014-experimental"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+  
+  # Install Microsoft.WindowsAppSDK to get all its dependencies. 
+  # This task is only for temporary use, in ModifySampleAppsReferences.ps1 we will delete folder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK".
+  - task: NuGetCommand@2
+    inputs:
+      command: 'custom'
+      arguments: >
+        install "Microsoft.WindowsAppSDK"
+        -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+        -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
+        -Prerelease
 
   # run the Show-FolderTree.ps1 at build\Scripts
   - task: PowerShell@2
@@ -187,13 +198,15 @@ jobs:
       version: '9.0.200'
   #====================================================================================================================
 
-  # - task: PowerShell@2
-  #   displayName: UpdateVersions
-  #   inputs:
-  #     filePath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\UpdateVersions.ps1'
-  #     arguments: >
-  #       -WinAppSDKVersion "$(WindowsAppSDKPackageVersion)"
-  #       -NuGetPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
+  - task: PowerShell@2
+    displayName: "Modify Sample Apps References" 
+    inputs:
+      filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\test\ModifySampleAppsReferences.ps1'
+      arguments: >
+        -SampleRepoRoot "$(Build.SourcesDirectory)\$(SamplesRepoName)"
+        -FoundationVersion "1.8.250812004-preview"
+        -FoundationPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
+        -WASDKPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
   
   # this task is used to update the nuget.config file to point to the internal feed
   - powershell: |
