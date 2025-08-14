@@ -289,7 +289,7 @@ jobs:
           platform: '${{ platform }}'
           configuration: '${{ config }}'
           # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-          msbuildArgs: '/p:WindowsAppSDKVerifyTransitiveDependencies=false /p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger:$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\$(feature).build.${{ platform }}.${{ config }}.binlog'
+          msbuildArgs: '/p:WindowsAppSDKVerifyTransitiveDependencies=false /p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger'
           ${{ if and(eq( parameters.EnablePREFast, 'true'), eq(parameters.RunSDLBinaryAnalysis, 'true')) }}:
             # This property helps prevent tool architecture detection in the PreFast task to pick x86 (default)
             # as the "preferred tool architecture", which results in multiple sample apps failing to build due
