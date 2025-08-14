@@ -32,59 +32,59 @@ parameters:
     default:
       # These featureAreas are currently being built for [x64 | arm64] x [Release | Debug].
       SamplesCompatTest:
-      # - 'DeploymentManager'
-      # - 'Installer'
-      # - 'PhotoEditor'
-      # - 'TextRendering'
-      - 'Unpackaged-cpp--console--unpackaged'
-      # # - 'CustomControls' [regressed with CoreWebView2 refactor - temporarily disable to unblock build]
-      # - 'Notifications'
-      # - 'Widgets'
-      # - 'Composition'
-      # - 'Insights'
-      # # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
-      # # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
-      # # we need to use the feature name in file paths later. For instance:
-      # # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
-      # # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
-      # # by doubling it up as "--".
-      # - 'AppLifecycle-Activation-cpp'
-      # - 'AppLifecycle-Activation-cs'
-      # - 'AppLifecycle-Activation-cs1'
-      # - 'AppLifecycle-Activation-cs2'
-      # - 'AppLifecycle-Instancing-cpp'
-      # - 'AppLifecycle-Instancing-cs'
-      # - 'AppLifecycle-Instancing-cs1'
-      # - 'AppLifecycle-Instancing-cs2'
-      # - 'AppLifecycle-StateNotifications-cpp'
-      # - 'AppLifecycle-StateNotifications-cs'
-      # - 'AppLifecycle-StateNotifications-cs1'
-      # - 'AppLifecycle-StateNotifications-cs2'
-      # - 'AppLifecycle-EnvironmentVariables'
-      # - 'AppLifecycle-Restart'
-      # - 'AppLifecycle-RestartRegistration'
-      # - 'AppLifecycle-ShareTarget'
-      # - 'CameraCaptureUI'
-      # - 'ResourceManagement-cpp'
-      # - 'ResourceManagement-cs'
-      # - 'ResourceManagement-cs1'
-      # - 'Input'
-      # - 'Mica'
-      # - 'Windowing-cpp'
-      # - 'Windowing-cs'
-      # - 'Windowing-cs1'
-      # - 'SelfContainedDeployment-cpp'
-      # - 'SelfContainedDeployment-cs'
-      # - 'SelfContainedDeployment-cs1'
-      # - 'SelfContainedDeployment-cs2'
-      # # - 'WindowsAIFoundry-cpp--console--unpackaged' [disabled currently as build pipeline does not support cmake build]
-      # # - 'WindowsAIFoundry-cs--maui' [disabled currently as build pipeline does not have required workloads for building]
-      # - 'WindowsAIFoundry-cs--Winforms--Pckg'
-      # - 'WindowsAIFoundry-cs--Winforms--Sparse'
-      # - 'WindowsAIFoundry-cs--WinUI'
-      # - 'WindowsAIFoundry-cs--Wpf'
-      # # - 'WindowsAIFoundry-Cs--Wpf--Dotnet' [disabled currently as build pipeline cannot support .net9 projects]
-      # - 'WindowsAIFoundry-cs--Wpf--Sparse'
+      - 'DeploymentManager'
+      - 'Installer'
+      - 'PhotoEditor'
+      - 'TextRendering'
+      - 'Unpackaged'
+      # - 'CustomControls' [regressed with CoreWebView2 refactor - temporarily disable to unblock build]
+      - 'Notifications'
+      - 'Widgets'
+      - 'Composition'
+      - 'Insights'
+      # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
+      # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
+      # we need to use the feature name in file paths later. For instance:
+      # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
+      # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
+      # by doubling it up as "--".
+      - 'AppLifecycle-Activation-cpp'
+      - 'AppLifecycle-Activation-cs'
+      - 'AppLifecycle-Activation-cs1'
+      - 'AppLifecycle-Activation-cs2'
+      - 'AppLifecycle-Instancing-cpp'
+      - 'AppLifecycle-Instancing-cs'
+      - 'AppLifecycle-Instancing-cs1'
+      - 'AppLifecycle-Instancing-cs2'
+      - 'AppLifecycle-StateNotifications-cpp'
+      - 'AppLifecycle-StateNotifications-cs'
+      - 'AppLifecycle-StateNotifications-cs1'
+      - 'AppLifecycle-StateNotifications-cs2'
+      - 'AppLifecycle-EnvironmentVariables'
+      - 'AppLifecycle-Restart'
+      - 'AppLifecycle-RestartRegistration'
+      - 'AppLifecycle-ShareTarget'
+      - 'CameraCaptureUI'
+      - 'ResourceManagement-cpp'
+      - 'ResourceManagement-cs'
+      - 'ResourceManagement-cs1'
+      - 'Input'
+      - 'Mica'
+      - 'Windowing-cpp'
+      - 'Windowing-cs'
+      - 'Windowing-cs1'
+      - 'SelfContainedDeployment-cpp'
+      - 'SelfContainedDeployment-cs'
+      - 'SelfContainedDeployment-cs1'
+      - 'SelfContainedDeployment-cs2'
+      # - 'WindowsAIFoundry-cpp--console--unpackaged' [disabled currently as build pipeline does not support cmake build]
+      # - 'WindowsAIFoundry-cs--maui' [disabled currently as build pipeline does not have required workloads for building]
+      - 'WindowsAIFoundry-cs--Winforms--Pckg'
+      - 'WindowsAIFoundry-cs--Winforms--Sparse'
+      - 'WindowsAIFoundry-cs--WinUI'
+      - 'WindowsAIFoundry-cs--Wpf'
+      # - 'WindowsAIFoundry-Cs--Wpf--Dotnet' [disabled currently as build pipeline cannot support .net9 projects]
+      - 'WindowsAIFoundry-cs--Wpf--Sparse'
 
 stages:
 - stage: BuildSampleApps_x64
