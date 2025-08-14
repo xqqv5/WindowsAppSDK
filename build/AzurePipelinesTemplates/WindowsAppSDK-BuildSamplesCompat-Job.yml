@@ -397,7 +397,7 @@ jobs:
     condition: succeededOrFailed()
     inputs:
       targetPath: '$(Build.SourcesDirectory)'
-      artifact: 'tmp_allFiles'
+      artifact: 'tmp_allFiles_$(System.JobName)'
 
   - task: PowerShell@2
     displayName: Display storage and diagnostic info
