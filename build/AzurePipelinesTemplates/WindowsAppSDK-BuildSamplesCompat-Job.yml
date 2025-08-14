@@ -204,7 +204,7 @@ jobs:
       filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\test\ModifySampleAppsReferences.ps1'
       arguments: >
         -SampleRepoRoot "$(Build.SourcesDirectory)\$(SamplesRepoName)"
-        -FoundationVersion "1.8.250812004-preview"
+        -FoundationVersion "1.8.250722000-experimental"
         -FoundationPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -WASDKPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
   
