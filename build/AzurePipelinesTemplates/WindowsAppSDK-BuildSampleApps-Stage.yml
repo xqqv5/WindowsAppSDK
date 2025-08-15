@@ -31,17 +31,17 @@ parameters:
     type: object
     default:
       # These featureAreas are currently being built for [x64 | arm64] x [Release | Debug].
-      SamplesCompatTest:
-      - 'Installer'
-      - 'Unpackaged'
-      - 'Notifications-Push'
-      - 'Insights'
       # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
       # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
       # we need to use the feature name in file paths later. For instance:
       # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
       # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
       # by doubling it up as "--".
+      SamplesCompatTest:
+      - 'Installer'
+      - 'Unpackaged'
+      - 'Notifications-Push'
+      - 'Insights'
       - 'AppLifecycle-Activation-cpp-cpp--console--unpackaged'
       - 'AppLifecycle-Activation-cpp-cpp--win32--unpackaged'
       - 'AppLifecycle-Activation-cs'
