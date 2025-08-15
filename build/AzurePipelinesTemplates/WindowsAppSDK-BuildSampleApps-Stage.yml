@@ -2,9 +2,6 @@ parameters:
   - name: "IsOneBranch"
     type: boolean
     default: true
-  - name: BuildSampleApps
-    type: boolean
-    default: true
   - name: TestSampleAppsAfterBuildStage
     displayName: "Test launch of Sample apps separately in the TestSampleApps Stage"
     type: boolean
@@ -68,7 +65,6 @@ parameters:
 
 stages:
 - stage: BuildSampleApps_x64
-  condition: and(succeeded(), eq(${{ parameters.BuildSampleApps }}, true))
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'
