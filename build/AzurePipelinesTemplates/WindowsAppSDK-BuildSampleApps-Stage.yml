@@ -31,36 +31,39 @@ parameters:
     type: object
     default:
       # These featureAreas are currently being built for [x64 | arm64] x [Release | Debug].
+      SamplesCompatTest:
+      - 'Installer'
+      - 'Unpackaged'
+      - 'Notifications-Push'
+      - 'Insights'
       # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
       # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
       # we need to use the feature name in file paths later. For instance:
       # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
       # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
       # by doubling it up as "--".
-      # In Foundation pipeline, not all .sln could be built with only the Foundation package. 
-      # So we use ":folder1;folder2" to specify which subfolders to build, if we don’t want to build all subfolders for a featureArea.
-      SamplesCompatTest:
-      - 'Installer'
-      - 'Unpackaged'
-      - 'Notifications:Push'
-      - 'Insights'
-      - 'AppLifecycle-Activation-cpp:cpp-console-unpackaged;cpp-win32-unpackaged'
+      - 'AppLifecycle-Activation-cpp-cpp--console--unpackaged'
+      - 'AppLifecycle-Activation-cpp-cpp--win32--unpackaged'
       - 'AppLifecycle-Activation-cs'
-      - 'AppLifecycle-Instancing-cpp:cpp-console-unpackaged;cpp-win32-packaged;cpp-win32-unpackaged'
+      - 'AppLifecycle-Instancing-cpp-cpp--console--unpackaged'
+      - 'AppLifecycle-Instancing-cpp-cpp--win32--packaged'
+      - 'AppLifecycle-Instancing-cpp-cpp--win32--unpackaged'
       - 'AppLifecycle-Instancing-cs'
       - 'AppLifecycle-Instancing-cs1'
-      - 'AppLifecycle-StateNotifications-cpp:cpp-console-unpackaged;cpp-win32-packaged;cpp-win32-unpackaged'
+      - 'AppLifecycle-StateNotifications-cpp-cpp--console--unpackaged'
+      - 'AppLifecycle-StateNotifications-cpp-cpp--win32--packaged'
+      - 'AppLifecycle-StateNotifications-cpp-cpp--win32--unpackaged'
       - 'AppLifecycle-StateNotifications-cs'
       - 'AppLifecycle-StateNotifications-cs1'
       - 'AppLifecycle-EnvironmentVariables'
-      - 'AppLifecycle-Restart:cpp-console-unpackaged'
-      - 'ResourceManagement-cpp:cpp-console-unpackaged'
-      - 'ResourceManagement-cs:cs-winforms-unpackaged'
+      - 'AppLifecycle-Restart-cpp--console--unpackaged'
+      - 'ResourceManagement-cpp-cpp--console--unpackaged'
+      - 'ResourceManagement-cs-cs--winforms--unpackaged'
       - 'ResourceManagement-cs1'
-      - 'Mica:cpp-win32'
-      - 'Windowing-cpp:cpp-win32'
-      - 'Windowing-cs:cs-winforms-unpackaged'
-      - 'SelfContainedDeployment-cpp:cpp-console-unpackaged'
+      - 'Mica-cpp--win32'
+      - 'Windowing-cpp-cpp--win32'
+      - 'Windowing-cs-cs--winforms--unpackaged'
+      - 'SelfContainedDeployment-cpp-cpp--console--unpackaged'
       - 'SelfContainedDeployment-cs'
 
 stages:

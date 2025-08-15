@@ -101,11 +101,6 @@ jobs:
       targetType: 'inline'
       script: |
         $tempFeature = '$(feature)'
-        # Handle colon separator - take content before ":"
-        if ($tempFeature.Contains(":")) {
-            $tempFeature = $tempFeature.Split(":")[0]
-        }
-        # Handle hyphen to backslash conversion
         if ($tempFeature.Contains("-"))
         {
             $tempFeature = $tempFeature.Replace("--", "TEMPHYPHEN")
@@ -114,33 +109,6 @@ jobs:
         }
         Write-Host "##vso[task.setvariable variable=featureForFilePath;isOutput=true]$tempFeature"
         Write-Host "##vso[task.setvariable variable=featureForFilePath;]$tempFeature"
-
-  # Handle the subfolder specified by ":folder1;folder2" - for the subfolders that are not specified, we will delete them in this task.
-  - task: PowerShell@2
-    displayName: 'Delete unneeded subfolders'
-    inputs:
-      targetType: 'inline'
-      script: |
-        $tempFeature = '$(feature)'
-        if (!$tempFeature.Contains(":")) {
-            return 0
-        }
-        $featureFolder = '.\$(SamplesRepoName)\Samples\$(featureForFilePath)'
-        $subfoldersToKeep = $tempFeature.Split(":")[1]
-        $subfoldersToKeep = $subfoldersToKeep.Split(";")
-
-        # get all subfolders in the feature folder
-        $allSubfolders = Get-ChildItem -Path $featureFolder -Directory
-
-        # remove all subfolders that are not in the subfoldersToKeep list
-        foreach ($subfolder in $allSubfolders) {
-            if ($subfoldersToKeep -notcontains $subfolder.Name) {
-                Write-Host "Deleting subfolder: $($subfolder.FullName)"
-                Remove-Item -Path $subfolder.FullName -Recurse -Force
-            } else {
-                Write-Host "Keeping subfolder: $($subfolder.FullName)"
-            }
-        }
 
   # The following steps are used to prepare the environment for building Sample apps.
   - powershell: |
