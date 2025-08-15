@@ -121,16 +121,17 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
+        $tempFeature = '$(feature)'
         if (!$tempFeature.Contains(":")) {
             return 0
         }
         $featureFolder = '.\$(SamplesRepoName)\Samples\$(featureForFilePath)'
-        $subfoldersToKeep = '$(feature)'.Split(":")[1]
-        $subfoldersToKeep = $subfolders.Split(";")
+        $subfoldersToKeep = $tempFeature.Split(":")[1]
+        $subfoldersToKeep = $subfoldersToKeep.Split(";")
 
         # get all subfolders in the feature folder
         $allSubfolders = Get-ChildItem -Path $featureFolder -Directory
-        
+
         # remove all subfolders that are not in the subfoldersToKeep list
         foreach ($subfolder in $allSubfolders) {
             if ($subfoldersToKeep -notcontains $subfolder.Name) {
