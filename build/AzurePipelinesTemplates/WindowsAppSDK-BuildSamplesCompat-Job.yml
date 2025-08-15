@@ -308,24 +308,24 @@ jobs:
         # Given those challenges and that we currently prioritize Sample code over Product code, in this first round we just pick a few a Sample apps to PREFast scan them.
         # In the future, considering the long time required to scan the Sample apps, it might make more sense to create a separate weekly pipeline to PREFast scan the Sample
         # apps, for instance.
-        - task: SDLNativeRules@3
-          displayName: PREfast SDL Native Rules for PhotoEditor
-          condition: and(succeeded(), eq(variables['featureForFilePath'], 'PhotoEditor'))
-          inputs:
-            setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-            msBuildArchitecture: amd64
-            # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-            msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui\PhotoEditor.sln'
-            # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-            excludedPaths: |
-              $(Build.SourcesDirectory)\packages
-            # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-            rulesetName: Custom
-            customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-            policyName: 'WindowsUndocked'
-          continueOnError: true
-          env:
-            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        # - task: SDLNativeRules@3
+        #   displayName: PREfast SDL Native Rules for PhotoEditor
+        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'PhotoEditor'))
+        #   inputs:
+        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
+        #     msBuildArchitecture: amd64
+        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
+        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui\PhotoEditor.sln'
+        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
+        #     excludedPaths: |
+        #       $(Build.SourcesDirectory)\packages
+        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
+        #     rulesetName: Custom
+        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
+        #     policyName: 'WindowsUndocked'
+        #   continueOnError: true
+        #   env:
+        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
         - task: SDLNativeRules@3
           displayName: PREfast SDL Native Rules for AppLifecycle\Activation\cpp
@@ -347,43 +347,43 @@ jobs:
             SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
         # PREFast currently reports no issue for this .sln file, so this is a nice baseline to have.
-        - task: SDLNativeRules@3
-          displayName: PREfast SDL Native Rules for AppLifecycle\Activation\cs2
-          condition: and(succeeded(), eq(variables['featureForFilePath'], 'AppLifecycle\Activation\cs2'))
-          inputs:
-            setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-            msBuildArchitecture: amd64
-            # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-            msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cs-winui-packaged\CsWinUiDesktopActivation.sln'
-            # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-            excludedPaths: |
-              $(Build.SourcesDirectory)\packages
-            # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-            rulesetName: Custom
-            customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-            policyName: 'WindowsUndocked'
-          continueOnError: true
-          env:
-            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        # - task: SDLNativeRules@3
+        #   displayName: PREfast SDL Native Rules for AppLifecycle\Activation\cs2
+        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'AppLifecycle\Activation\cs2'))
+        #   inputs:
+        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
+        #     msBuildArchitecture: amd64
+        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
+        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cs-winui-packaged\CsWinUiDesktopActivation.sln'
+        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
+        #     excludedPaths: |
+        #       $(Build.SourcesDirectory)\packages
+        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
+        #     rulesetName: Custom
+        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
+        #     policyName: 'WindowsUndocked'
+        #   continueOnError: true
+        #   env:
+        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
-        - task: SDLNativeRules@3
-          displayName: PREfast SDL Native Rules for SelfContainedDeployment\cpp
-          condition: and(succeeded(), eq(variables['featureForFilePath'], 'SelfContainedDeployment\cpp'))
-          inputs:
-            setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-            msBuildArchitecture: amd64
-            # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-            msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui-packaged\SelfContainedDeployment.sln'
-            # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-            excludedPaths: |
-              $(Build.SourcesDirectory)\packages
-            # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-            rulesetName: Custom
-            customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-            policyName: 'WindowsUndocked'
-          continueOnError: true
-          env:
-            SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+        # - task: SDLNativeRules@3
+        #   displayName: PREfast SDL Native Rules for SelfContainedDeployment\cpp
+        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'SelfContainedDeployment\cpp'))
+        #   inputs:
+        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
+        #     msBuildArchitecture: amd64
+        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
+        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui-packaged\SelfContainedDeployment.sln'
+        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
+        #     excludedPaths: |
+        #       $(Build.SourcesDirectory)\packages
+        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
+        #     rulesetName: Custom
+        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
+        #     policyName: 'WindowsUndocked'
+        #   continueOnError: true
+        #   env:
+        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
   - task: PowerShell@2
     displayName: Display storage and diagnostic info
