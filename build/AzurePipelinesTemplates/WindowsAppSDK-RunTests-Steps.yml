@@ -125,6 +125,11 @@ steps:
             condition: and(and(succeeded(), ne(variables['isPlatformX86'], 'true')), eq(variables['IsReleaseConfig'], 'true'))
             displayName: 'Download Release ${{ parameters.SamplesArtifactName }}_${{ artifactNameSuffix }}'
             inputs:
+              source: specific
+              runVersion: specific
+              project: $(System.TeamProjectId)
+              pipeline: $(_useBuildOutputFromPipeline)
+              pipelineId: 128509177
               artifactName: ${{ parameters.SamplesArtifactName }}_${{ artifactNameSuffix }}
               targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
               patterns: |
@@ -138,6 +143,11 @@ steps:
           condition: and(and(succeeded(), ne(variables['isPlatformX86'], 'true')), eq(variables['IsReleaseConfig'], 'true'))
           displayName: 'Download Release ${{ parameters.SamplesArtifactName }}_${{ featureAreas.key }}'
           inputs:
+            source: specific
+            runVersion: specific
+            project: $(System.TeamProjectId)
+            pipeline: $(_useBuildOutputFromPipeline)
+            pipelineId: 128509177
             artifactName: ${{ parameters.SamplesArtifactName }}_${{ featureAreas.key }}
             targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
             patterns: |

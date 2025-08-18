@@ -126,7 +126,7 @@ stages:
 
 - ${{ if eq( parameters.TestSampleAppsAfterBuildStage, true ) }}:
   - stage: TestSampleApps_x64
-    dependsOn: [BuildSampleApps_x64]
+    dependsOn: []
     variables:
       SamplesRepoName: 'WindowsAppSDK-Samples'
       SelfRepoName: 'WindowsAppSDK'
