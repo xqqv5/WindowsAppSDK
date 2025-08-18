@@ -144,7 +144,7 @@ stages:
           Write-Host "SamplesBuildOutputArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64"
           Write-Host "TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}"
           Write-Host "TestOnArm64: ${{ parameters.TestOnArm64 }}"
-          Write-Host "SampleAppsTests: $[ variables.SampleAppsTests ]"
+          Write-Host "SampleAppsTests: ${{ variables.SampleAppsTests }}"
         displayName: 'Echo variables'
 
     - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
