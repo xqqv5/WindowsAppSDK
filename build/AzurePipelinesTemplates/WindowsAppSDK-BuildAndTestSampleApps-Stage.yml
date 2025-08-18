@@ -126,27 +126,11 @@ stages:
 
 - ${{ if eq( parameters.TestSampleAppsAfterBuildStage, true ) }}:
   - stage: TestSampleApps_x64
-    dependsOn: []
+    dependsOn: [BuildSampleApps_x64]
     variables:
       SamplesRepoName: 'WindowsAppSDK-Samples'
       SelfRepoName: 'WindowsAppSDK'
     jobs:
-    # use powershell to echo variables
-    - job: echo_variables
-      pool:
-        type: windows
-        isCustom: true
-        name: 'ProjectReunionESPool-2022'
-      steps:
-      - powershell: |
-          Write-Host "SamplesRepoName: $(SamplesRepoName)"
-          Write-Host "SelfRepoName: $(SelfRepoName)"
-          Write-Host "SamplesBuildOutputArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64"
-          Write-Host "TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}"
-          Write-Host "TestOnArm64: ${{ parameters.TestOnArm64 }}"
-          Write-Host "SampleAppsTests: ${{ variables.SampleAppsTests }}"
-        displayName: 'Echo variables'
-
     - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
       parameters:
         jobName: TestSamplesX64
