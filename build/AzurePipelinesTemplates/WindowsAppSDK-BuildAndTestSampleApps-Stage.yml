@@ -132,7 +132,7 @@ stages:
       SelfRepoName: 'WindowsAppSDK'
     jobs:
     # use powershell to echo variables
-    - job: echo variables
+    - job: echo_variables
       pool:
         type: windows
         isCustom: true
