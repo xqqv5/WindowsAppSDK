@@ -24,7 +24,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: $(_useBuildOutputFromBuildId)
+      pipelineId: 128381997
       artifactName: "FoundationBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
@@ -35,7 +35,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: $(_useBuildOutputFromBuildId)
+      pipelineId: 128381997
       artifactName: "MrtBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
