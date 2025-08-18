@@ -41,11 +41,11 @@ resources:
     - repository: WindowsAppSDKConfig
       type: git
       name: ProjectReunion/WindowsAppSDKConfig
-      ref: refs/heads/main
+      ref: refs/heads/mainuser/haonantang/sampleApps
     - repository: WindowsAppSDKVersionConfig
       type: git
       name: ProjectReunion/WindowsAppSDKConfig
-      ref: refs/heads/user/haonantang/sampleApps
+      ref: refs/heads/main
     - repository: WindowsAppSDKSamples
       type: github
       endpoint: 'GitHub - benkuhn - 2-18'
