@@ -142,16 +142,16 @@ stages:
 
   - ${{ if eq(parameters.TestOnArm64, true)}}:
     - stage: TestSampleApps_arm64
-    dependsOn: []
-    variables:
-      SamplesRepoName: 'WindowsAppSDK-Samples'
-      SelfRepoName: 'WindowsAppSDK'
-    jobs:
-    - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
-      parameters:
-        jobName: TestSamplesArm64
-        samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_arm64
-        callingStage: 'TestSampleApps'
-        sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
-        IsOneBranch: ${{ parameters.IsOneBranch }}
-        TestMatrix: $[ variables.SampleAppsTests ]
+      dependsOn: []
+      variables:
+        SamplesRepoName: 'WindowsAppSDK-Samples'
+        SelfRepoName: 'WindowsAppSDK'
+      jobs:
+      - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
+        parameters:
+          jobName: TestSamplesArm64
+          samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_arm64
+          callingStage: 'TestSampleApps'
+          sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
+          IsOneBranch: ${{ parameters.IsOneBranch }}
+          TestMatrix: $[ variables.SampleAppsTests ]
