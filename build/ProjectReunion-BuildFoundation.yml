@@ -41,7 +41,7 @@ resources:
     - repository: WindowsAppSDKConfig
       type: git
       name: ProjectReunion/WindowsAppSDKConfig
-      ref: refs/heads/mainuser/haonantang/sampleApps
+      ref: refs/heads/user/haonantang/sampleApps
     - repository: WindowsAppSDKVersionConfig
       type: git
       name: ProjectReunion/WindowsAppSDKConfig
