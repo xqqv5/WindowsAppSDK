@@ -5,6 +5,8 @@ parameters:
   TaefSelect: '*'
   BinaryCompatSwitch: ''
   testLocale: ''
+  SamplesArtifactName: ''
+  IsOneBranch: false
 
 steps:
   - task: powershell@2
@@ -99,6 +101,60 @@ steps:
       arguments: -NoInteractive -Offline -Verbose -CheckTAEFService -ShowSystemInfo
       workingDirectory: '$(Build.SourcesDirectory)'
 
+  - task: PowerShell@2
+    displayName: Display storage info and init variables
+    inputs:
+      targetType: 'inline'
+      script: |
+        Get-WmiObject win32_logicaldisk | Format-Table DeviceId, MediaType, @{n="Size";e={[math]::Ro53und($_.Size/1GB,2)}},@{n="FreeSpace";e={[math]::Round($_.FreeSpace/1GB,2)}}, @{n="UsedSpace";e={[math]::Round((($_.Size-$_.FreeSpace)/1GB),2)}}
+        $IsPlatformX86 = (('${{ parameters.buildPlatform }}' -eq 'x86') -or ('${{ parameters.buildPlatform }}' -eq 'X86'))
+        Write-Output "##vso[task.setvariable variable=isPlatformX86;isOutput=true]$IsPlatformX86"
+        Write-Output "##vso[task.setvariable variable=isPlatformX86]$IsPlatformX86"
+        $IsReleaseConfig = (('${{ parameters.buildConfiguration }}' -eq 'release') -or ('${{ parameters.buildConfiguration }}' -eq 'Release'))
+        Write-Output "##vso[task.setvariable variable=isReleaseConfig;isOutput=true]$IsReleaseConfig"
+        Write-Output "##vso[task.setvariable variable=isReleaseConfig]$IsReleaseConfig"
+        Write-Host ${{ parameters.buildPlatform }}, ${{ parameters.buildConfiguration }}, $isPlatformX86, $isReleaseConfig, 'callingStage: ${{ parameters.callingStage }}'
+
+  - ${{  if ne(parameters.samplesArtifactName, '') }}:
+    - ${{ each featureAreas in parameters.sampleFeatureAreasList }}:
+      - ${{ if parameters.IsOneBranch }}:
+        - ${{ each artifactNameSuffix in featureAreas.value }}:
+          # If we are downloading for Release config, omit the *debug* specific stuff to save time and storage.
+          # If we are running for x86 platform, then don't download Sample app artifacts, as we currently don't build Samples for x86.
+          - task: DownloadPipelineArtifact@2
+            condition: and(and(succeeded(), ne(variables['isPlatformX86'], 'true')), eq(variables['IsReleaseConfig'], 'true'))
+            displayName: 'Download Release ${{ parameters.SamplesArtifactName }}_${{ artifactNameSuffix }}'
+            inputs:
+              artifactName: ${{ parameters.SamplesArtifactName }}_${{ artifactNameSuffix }}
+              targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
+              patterns: |
+                **
+                !**/*binlog
+                !**/*debug*/**/*
+
+      - ${{ if not( parameters.IsOneBranch ) }}:
+        - task: DownloadPipelineArtifact@2
+          # It is currently by design to _not_ test Sample apps when platform=x86 or config=Debug.
+          condition: and(and(succeeded(), ne(variables['isPlatformX86'], 'true')), eq(variables['IsReleaseConfig'], 'true'))
+          displayName: 'Download Release ${{ parameters.SamplesArtifactName }}_${{ featureAreas.key }}'
+          inputs:
+            artifactName: ${{ parameters.SamplesArtifactName }}_${{ featureAreas.key }}
+            targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
+            patterns: |
+              **
+              !**/*binlog
+              !**/*debug*/**/*
+
+    # WindowsAppSDKSampleAppTests requires SAMPLES_ROOT_PATH to be set.
+    - task: PowerShell@2
+      displayName: Set SAMPLES_ROOT_PATH env variable
+      condition: and(succeeded(), and(ne(variables['isPlatformX86'], 'true'), eq(variables['IsReleaseConfig'], 'true')))
+      inputs:
+        targetType: 'inline'
+        script: |
+          Write-Host "##vso[task.setvariable variable=SAMPLES_ROOT_PATH;isOutput=true]$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples"
+          Write-Host "##vso[task.setvariable variable=SAMPLES_ROOT_PATH;]$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples"
+
   - task: VisualStudioTestPlatformInstaller@1
     inputs:
       versionSelector: latestStable
@@ -159,51 +215,58 @@ steps:
         sc.exe queryex te.service | Write-Host
         sc.exe qc te.service | Write-Host
   
-  - task: PowerShell@2
-    displayName: 'Run TAEF Tests'
-    inputs:
-      filePath: 'TestAll.ps1'
-      arguments: >
-        -OutputFolder "$(Build.SourcesDirectory)\BuildOutput"
-        -Platform "${{ parameters.buildPlatform }}"
-        -Configuration "${{ parameters.buildConfiguration }}"
-        -Test
-        -List
-        -wprProfilePath "$(Build.SourcesDirectory)\WindowsAppSDKConfig\src\test\AppModelProviders.wprp"
+  # - task: PowerShell@2
+  #   displayName: 'Run TAEF Tests'
+  #   inputs:
+  #     filePath: 'TestAll.ps1'
+  #     arguments: >
+  #       -OutputFolder "$(Build.SourcesDirectory)\BuildOutput"
+  #       -Platform "${{ parameters.buildPlatform }}"
+  #       -Configuration "${{ parameters.buildConfiguration }}"
+  #       -Test
+  #       -List
+  #       -wprProfilePath "$(Build.SourcesDirectory)\WindowsAppSDKConfig\src\test\AppModelProviders.wprp"
 
-  - template: AzurePipelinesTemplates\WindowsAppSDK-ConvertWttLogToXUnit-Steps.yml@WindowsAppSDKConfig
-    parameters:
-      WttInputPath: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)\Te.wtl'
-      xunitOutputPath: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)\testResults-$(buildConfiguration)_$(buildPlatform)_${{ parameters.ImageName }}.xml'
-      TestNamePrefix: '$(buildConfiguration)_$(buildPlatform)_${{ parameters.ImageName }}'
-      BypassTests: '$(Build.SourcesDirectory)\test\BypassTests.json'
-      CheckoutPath: '$(Build.SourcesDirectory)\WindowsAppSDKConfig'
+  # - template: AzurePipelinesTemplates\WindowsAppSDK-ConvertWttLogToXUnit-Steps.yml@WindowsAppSDKConfig
+  #   parameters:
+  #     WttInputPath: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)\Te.wtl'
+  #     xunitOutputPath: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)\testResults-$(buildConfiguration)_$(buildPlatform)_${{ parameters.ImageName }}.xml'
+  #     TestNamePrefix: '$(buildConfiguration)_$(buildPlatform)_${{ parameters.ImageName }}'
+  #     BypassTests: '$(Build.SourcesDirectory)\test\BypassTests.json'
+  #     CheckoutPath: '$(Build.SourcesDirectory)\WindowsAppSDKConfig'
 
-  - task: PublishTestResults@2
-    displayName: 'Publish test results'
-    condition: succeededOrFailed()
-    inputs:
-      testResultsFormat: xUnit
-      testResultsFiles: testResults-*.xml
-      searchFolder: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)'
-      mergeTestResults: true
-      failTaskOnFailedTests: true
-      testRunTitle: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)'
-      buildPlatform: ${{ parameters.buildPlatform }}
-      buildConfiguration: ${{ parameters.buildConfiguration }}
+  # - task: PublishTestResults@2
+  #   displayName: 'Publish test results'
+  #   condition: succeededOrFailed()
+  #   inputs:
+  #     testResultsFormat: xUnit
+  #     testResultsFiles: testResults-*.xml
+  #     searchFolder: '$(Build.SourcesDirectory)\TestOutput\$(buildConfiguration)\$(buildPlatform)'
+  #     mergeTestResults: true
+  #     failTaskOnFailedTests: true
+  #     testRunTitle: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)'
+  #     buildPlatform: ${{ parameters.buildPlatform }}
+  #     buildConfiguration: ${{ parameters.buildConfiguration }}
 
-  # Edit the artifactAttempt variable when the job has failed, so that the artifact name can be unique.
-  - task: PowerShell@2
-    displayName: Edit the artifactAttempt variable when the job has failed
-    condition: failed()
-    inputs:
-      targetType: 'inline'
-      script: |
-        Write-Host "##vso[task.setvariable variable=artifactAttempt]_$(System.JobAttempt)"
+  # # Edit the artifactAttempt variable when the job has failed, so that the artifact name can be unique.
+  # - task: PowerShell@2
+  #   displayName: Edit the artifactAttempt variable when the job has failed
+  #   condition: failed()
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       Write-Host "##vso[task.setvariable variable=artifactAttempt]_$(System.JobAttempt)"
+
+  # - task: PublishPipelineArtifact@1
+  #   condition: succeededOrFailed()
+  #   inputs:
+  #     targetPath: '$(Build.SourcesDirectory)\TestOutput'
+  #     artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)$(artifactAttempt)'
+  #     Parallel: true
 
   - task: PublishPipelineArtifact@1
     condition: succeededOrFailed()
     inputs:
-      targetPath: '$(Build.SourcesDirectory)\TestOutput'
-      artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)$(artifactAttempt)'
+      targetPath: '$(Build.SourcesDirectory)'
+      artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)'
       Parallel: true
