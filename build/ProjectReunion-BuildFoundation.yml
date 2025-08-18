@@ -60,8 +60,8 @@ stages:
       TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
       TestOnArm64: ${{ parameters.TestOnArm64 }}
       runStaticAnalysis: ${{ parameters.runStaticAnalysis }}
-      maxParallelForBuildSamplesCompatJob_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
-      maxParallelForBuildSamplesCompatJob_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}
+      maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
+      maxParallel_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}
 
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildInstaller-Stage.yml@self
 
