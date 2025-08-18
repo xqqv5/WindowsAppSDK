@@ -18,6 +18,10 @@ parameters:
   displayName: "Maximum number of parallel runs for Samples Compat Tests on platform x64"
   type: number
   default: 13     # comparing with Nightly and Official build, PR build may have several build running at same time. Need to reduce max parallel to avoid exceeding
+- name: maxParallelForBuildSamplesCompatJob_arm64
+  displayName: "Maximum number of parallel runs for Samples Compat Tests on platform arm64"
+  type: number
+  default: 13     # comparing with Nightly and Official build, PR build may have several build running at same time. Need to reduce max parallel to avoid exceeding
 - name: runStaticAnalysis
   displayName: "Run Static Analysis (e.g., PREFast, APIScan)"
   type: boolean
@@ -52,7 +56,8 @@ stages:
       TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
       runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
       maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
-    
+      maxParallel_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}
+
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildInstaller-Stage.yml@self
 
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildVSIX-Stage.yml@self
