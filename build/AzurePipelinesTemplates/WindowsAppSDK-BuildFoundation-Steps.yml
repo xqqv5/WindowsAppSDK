@@ -72,7 +72,7 @@ steps:
   name: BuildFoundation
   inputs:
     filePath: 'BuildAll.ps1'
-    arguments: -Platform "$(buildPlatform)" -Configuration "$(buildConfiguration)" -AzureBuildStep "BuildFoundation"
+    arguments: -Platform "$(buildPlatform)" -Configuration "$(buildConfiguration)" -AzureBuildStep "BuildFoundation" -WindowsAppSDKFoundationVersion "1.8.250722000-experimental"
 
 - ${{ if eq(parameters.runPREfast, 'true') }}:
   - task: SDLNativeRules@3
