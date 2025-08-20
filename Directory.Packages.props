@@ -22,5 +22,9 @@
     <PackageVersion Include="Microsoft.Windows.CppWinRT" Version="$(CppWinRTVersion)" Condition=" '$(CppWinRTVersion)' != '' " />
     <PackageVersion Include="Microsoft.Windows.SDK.BuildTools" Version="$(WindowsSDKBuildToolsVersion)" Condition=" '$(WindowsSDKBuildToolsVersion)' != '' " />
     <PackageVersion Include="Microsoft.Windows.ImplementationLibrary" Version="$(WILVersion)" Condition=" '$(WILVersion)' != '' " />
+    <PackageVersion Include="Microsoft.WindowsAppSDK.Foundation" Version="$(WindowsAppSDKFoundationPackageVersion)" Condition=" '$(WindowsAppSDKFoundationPackageVersion)' != '' " />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageVersion Include="Microsoft.Taef" Version="10.75.221207001" />
+    <PackageVersion Include="Microsoft.Windows.Apps.Test" Version="1.0.181205002" />
   </ItemGroup>
 </Project>
