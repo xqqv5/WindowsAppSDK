@@ -8,6 +8,7 @@
     <Platforms>x86;x64;arm64</Platforms>
 
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
+    <WindowsAppSdkSelfContained>true</WindowsAppSdkSelfContained>
   </PropertyGroup>
 
   <ItemGroup>
