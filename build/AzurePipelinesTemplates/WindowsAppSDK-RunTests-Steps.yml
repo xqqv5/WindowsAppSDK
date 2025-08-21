@@ -7,6 +7,7 @@ parameters:
   testLocale: ''
   SamplesArtifactName: ''
   IsOneBranch: false
+  callingStage: ''
 
 steps:
   - task: powershell@2
@@ -24,7 +25,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: 128381997
+      pipelineId: $(_useBuildOutputFromBuildId)
       artifactName: "FoundationBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
@@ -35,7 +36,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: 128381997
+      pipelineId: $(_useBuildOutputFromBuildId)
       artifactName: "MrtBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
@@ -225,17 +226,18 @@ steps:
         sc.exe queryex te.service | Write-Host
         sc.exe qc te.service | Write-Host
   
-  # - task: PowerShell@2
-  #   displayName: 'Run TAEF Tests'
-  #   inputs:
-  #     filePath: 'TestAll.ps1'
-  #     arguments: >
-  #       -OutputFolder "$(Build.SourcesDirectory)\BuildOutput"
-  #       -Platform "${{ parameters.buildPlatform }}"
-  #       -Configuration "${{ parameters.buildConfiguration }}"
-  #       -Test
-  #       -List
-  #       -wprProfilePath "$(Build.SourcesDirectory)\WindowsAppSDKConfig\src\test\AppModelProviders.wprp"
+  - task: PowerShell@2
+    displayName: 'Run TAEF Tests'
+    inputs:
+      filePath: 'TestAll.ps1'
+      arguments: >
+        -OutputFolder "$(Build.SourcesDirectory)\BuildOutput"
+        -Platform "${{ parameters.buildPlatform }}"
+        -Configuration "${{ parameters.buildConfiguration }}"
+        -Test
+        -List
+        -wprProfilePath "$(Build.SourcesDirectory)\WindowsAppSDKConfig\src\test\AppModelProviders.wprp"
+        -callingStage "${{ parameters.callingStage }}"
 
   # - template: AzurePipelinesTemplates\WindowsAppSDK-ConvertWttLogToXUnit-Steps.yml@WindowsAppSDKConfig
   #   parameters:

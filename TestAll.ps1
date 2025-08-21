@@ -73,6 +73,8 @@ param(
 
         [Parameter(Mandatory=$true)]
         [string]$wprProfilePath
+        
+        [string]$callingStage = ''
 )
 
 $StartTime = Get-Date
@@ -118,6 +120,15 @@ function Get-Tests
             $tests += $t
             $count += 1
         }
+    }
+
+    if ($callingStage -eq 'TestSampleApps')
+    {
+        $tests = $tests | Where-Object { $_.Filename -like "WindowsAppSDK.Test.SampleTests.dll" }
+    }
+    else 
+    {
+        $tests = $tests | Where-Object { $_.Filename -notlike "WindowsAppSDK.Test.SampleTests.dll" }
     }
 
     $tests

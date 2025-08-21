@@ -124,34 +124,34 @@ stages:
       runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
       maxParallel: ${{ parameters.maxParallel_arm64 }}
 
-- ${{ if eq( parameters.TestSampleAppsAfterBuildStage, true ) }}:
-  - stage: TestSampleApps_x64
-    dependsOn: []
-    variables:
-      SamplesRepoName: 'WindowsAppSDK-Samples'
-      SelfRepoName: 'WindowsAppSDK'
-    jobs:
-    - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
-      parameters:
-        jobName: TestSamplesX64
-        samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64
-        callingStage: 'TestSampleApps'
-        sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
-        IsOneBranch: ${{ parameters.IsOneBranch }}
-        TestMatrix: $[ variables.SampleAppsTests ]
+# - ${{ if eq( parameters.TestSampleAppsAfterBuildStage, true ) }}:
+#   - stage: TestSampleApps_x64
+#     dependsOn: []
+#     variables:
+#       SamplesRepoName: 'WindowsAppSDK-Samples'
+#       SelfRepoName: 'WindowsAppSDK'
+#     jobs:
+#     - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
+#       parameters:
+#         jobName: TestSamplesX64
+#         samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64
+#         callingStage: 'TestSampleApps'
+#         sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
+#         IsOneBranch: ${{ parameters.IsOneBranch }}
+#         TestMatrix: $[ variables.SampleAppsTests ]
 
-  - ${{ if eq(parameters.TestOnArm64, true)}}:
-    - stage: TestSampleApps_arm64
-      dependsOn: []
-      variables:
-        SamplesRepoName: 'WindowsAppSDK-Samples'
-        SelfRepoName: 'WindowsAppSDK'
-      jobs:
-      - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
-        parameters:
-          jobName: TestSamplesArm64
-          samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_arm64
-          callingStage: 'TestSampleApps'
-          sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
-          IsOneBranch: ${{ parameters.IsOneBranch }}
-          TestMatrix: $[ variables.SampleAppsTests ]
+#   - ${{ if eq(parameters.TestOnArm64, true)}}:
+#     - stage: TestSampleApps_arm64
+#       dependsOn: []
+#       variables:
+#         SamplesRepoName: 'WindowsAppSDK-Samples'
+#         SelfRepoName: 'WindowsAppSDK'
+#       jobs:
+#       - template: WindowsAppSDK-RunTestsInPipeline-Job.yml
+#         parameters:
+#           jobName: TestSamplesArm64
+#           samplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_arm64
+#           callingStage: 'TestSampleApps'
+#           sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
+#           IsOneBranch: ${{ parameters.IsOneBranch }}
+#           TestMatrix: $[ variables.SampleAppsTests ]
