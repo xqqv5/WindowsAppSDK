@@ -72,7 +72,7 @@ param(
         [Switch]$ShowSystemInfo=$true,
 
         [Parameter(Mandatory=$true)]
-        [string]$wprProfilePath
+        [string]$wprProfilePath,
         
         [string]$callingStage = ''
 )
