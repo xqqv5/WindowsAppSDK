@@ -51,7 +51,7 @@ steps:
     inputs:
       targetType: 'filePath'
       filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
-      arguments: '-FolderPath "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"'
+      arguments: '-FolderPath "$(Build.SourcesDirectory)"'
 
   - task: powerShell@2
     displayName: 'Enable developer mode'
