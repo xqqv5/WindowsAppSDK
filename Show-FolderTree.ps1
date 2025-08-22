@@ -36,7 +36,7 @@ param(
     [string]$FolderPath,
     
     [Parameter(Mandatory = $false)]
-    [int]$MaxDepth = 3,
+    [int]$MaxDepth = 10,
     
     [Parameter(Mandatory = $false)]
     [switch]$ShowHidden,
