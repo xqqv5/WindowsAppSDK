@@ -122,14 +122,14 @@ function Get-Tests
         }
     }
 
-    if ($callingStage -eq 'TestSampleApps')
-    {
-        $tests = $tests | Where-Object { $_.Filename -like "WindowsAppSDK.Test.SampleTests.dll" }
-    }
-    else 
-    {
-        $tests = $tests | Where-Object { $_.Filename -notlike "WindowsAppSDK.Test.SampleTests.dll" }
-    }
+    # if ($callingStage -eq 'TestSampleApps')
+    # {
+    #     $tests = $tests | Where-Object { $_.Filename -like "WindowsAppSDK.Test.SampleTests.dll" }
+    # }
+    # else 
+    # {
+    #     $tests = $tests | Where-Object { $_.Filename -notlike "WindowsAppSDK.Test.SampleTests.dll" }
+    # }
 
     $tests
 }

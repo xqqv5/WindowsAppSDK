@@ -46,6 +46,13 @@ steps:
       SourceFolder: '$(Build.SourcesDirectory)\BuildOutput\redist'
       TargetFolder: '$(Build.SourcesDirectory)\redist'
 
+  - task: PowerShell@2
+    displayName: 'Show folder tree'
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\Show-FolderTree.ps1'
+      arguments: '-FolderPath "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"'
+
   - task: powerShell@2
     displayName: 'Enable developer mode'
     inputs:
@@ -276,9 +283,9 @@ steps:
       artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)$(artifactAttempt)'
       Parallel: true
 
-  - task: PublishPipelineArtifact@1
-    condition: succeededOrFailed()
-    inputs:
-      targetPath: '$(Build.SourcesDirectory)'
-      artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)'
-      Parallel: true
+  # - task: PublishPipelineArtifact@1
+  #   condition: succeededOrFailed()
+  #   inputs:
+  #     targetPath: '$(Build.SourcesDirectory)'
+  #     artifact: '$(System.StageName)_${{ parameters.ImageName }}_$(buildConfiguration)$(buildPlatform)_$(Agent.JobStatus)'
+  #     Parallel: true
