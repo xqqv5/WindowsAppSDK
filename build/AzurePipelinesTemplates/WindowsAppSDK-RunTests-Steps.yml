@@ -50,7 +50,7 @@ steps:
     displayName: 'Show folder tree'
     inputs:
       targetType: 'filePath'
-      filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\Show-FolderTree.ps1'
+      filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
       arguments: '-FolderPath "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"'
 
   - task: powerShell@2
