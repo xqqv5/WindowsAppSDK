@@ -25,7 +25,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: 128770540
+      pipelineId: $(_useBuildOutputFromBuildId)
       artifactName: "FoundationBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
@@ -36,7 +36,7 @@ steps:
       runVersion: specific
       project: $(System.TeamProjectId)
       pipeline: $(_useBuildOutputFromPipeline)
-      pipelineId: 128770540
+      pipelineId: $(_useBuildOutputFromBuildId)
       artifactName: "MrtBinaries_$(buildConfiguration)_$(buildPlatform)"
       targetPath: '$(Build.SourcesDirectory)\BuildOutput'
 
@@ -137,7 +137,7 @@ steps:
               runVersion: specific
               project: $(System.TeamProjectId)
               pipeline: $(_useBuildOutputFromPipeline)
-              pipelineId: 128770540
+              pipelineId: $(_useBuildOutputFromBuildId)
               artifactName: ${{ parameters.SamplesArtifactName }}_${{ artifactNameSuffix }}
               targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
               patterns: |
@@ -155,7 +155,7 @@ steps:
             runVersion: specific
             project: $(System.TeamProjectId)
             pipeline: $(_useBuildOutputFromPipeline)
-            pipelineId: 128770540
+            pipelineId: $(_useBuildOutputFromBuildId)
             artifactName: ${{ parameters.SamplesArtifactName }}_${{ featureAreas.key }}
             targetPath: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples'
             patterns: |
