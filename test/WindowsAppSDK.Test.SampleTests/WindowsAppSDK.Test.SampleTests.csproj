@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <Target Name="CopyTestDefFiles" AfterTargets="AfterBuild">
-    <Copy SkipUnchangedFiles="true" SourceFiles="WindowsAppSDK.Test.SampleTests.testdef" DestinationFolder="$(OutDir)" />
+    <Copy SkipUnchangedFiles="true" SourceFiles="SampleTest.testdef" DestinationFolder="$(OutDir)" />
   </Target>
 
 
