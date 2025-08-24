@@ -151,7 +151,7 @@ function Run-TaefTest
     $teLogFile = (Join-Path $env:Build_SourcesDirectory "BuildOutput\$Configuration\$Platform\Te.wtl")
     $teLogPathTo = (Join-Path $env:Build_SourcesDirectory "TestOutput\$Configuration\$Platform")
 
-    & $tePath $dllFile $test.Parameters /enableWttLogging /appendWttLogging /screenCaptureOnError /logFile:$teLogFile $/testMode:EtwLogger /EtwLogger:WprProfile=WDGDEPAdex /EtwLogger:SavePoint=TestFailure /EtwLogger:RecordingScope=Execution /EtwLogger:WprProfileFile=$wprProfilePath
+    & $tePath $dllFile $test.Parameters /enableWttLogging /appendWttLogging /screenCaptureOnError /logFile:$teLogFile /testMode:EtwLogger /EtwLogger:WprProfile=WDGDEPAdex /EtwLogger:SavePoint=TestFailure /EtwLogger:RecordingScope=Execution /EtwLogger:WprProfileFile=$wprProfilePath
 }
 
 function Run-PowershellTest
