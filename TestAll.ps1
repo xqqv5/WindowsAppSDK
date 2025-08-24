@@ -148,6 +148,19 @@ function Run-TaefTest
     $tePath = Join-Path $testFolder "te.exe"
     $dllFile = Join-Path $testFolder $test.Filename
 
+    # Set TAEF_CoreCLR environment variable
+    $dotnetPath = (Get-Command dotnet).Source
+    $dotnetRoot = Split-Path -Parent $dotnetPath
+    $net6Runtime = Get-ChildItem -Path "$dotnetRoot\shared\Microsoft.NETCore.App" -Directory | 
+                   Where-Object { $_.Name -like "6.*" } | 
+                   Sort-Object Name -Descending | 
+                   Select-Object -First 1
+    
+    if ($net6Runtime) {
+        $env:TAEF_CoreCLR = $net6Runtime.FullName
+        Write-Host "Set TAEF_CoreCLR to: $($env:TAEF_CoreCLR)"
+    }
+
     $teLogFile = (Join-Path $env:Build_SourcesDirectory "BuildOutput\$Configuration\$Platform\Te.wtl")
     $teLogPathTo = (Join-Path $env:Build_SourcesDirectory "TestOutput\$Configuration\$Platform")
 
