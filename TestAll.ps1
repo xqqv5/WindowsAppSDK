@@ -149,33 +149,6 @@ function Run-TaefTest
     $tePath = Join-Path $testFolder "te.exe"
     $dllFile = Join-Path $testFolder $test.Filename
 
-    # Check if running in Azure DevOps with dotnet installed
-    if ($env:DOTNET_ROOT) {
-        $dotnetRoot = $env:DOTNET_ROOT
-        Write-Host "Using DOTNET_ROOT: $dotnetRoot"
-    } elseif ($env:Agent_ToolsDirectory) {
-        # Azure DevOps agent
-        $dotnetRoot = Get-ChildItem -Path $env:Agent_ToolsDirectory -Directory -Filter "dotnet*" | 
-                      Select-Object -First 1 | 
-                      ForEach-Object { $_.FullName }
-        Write-Host "Found dotnet in Agent_ToolsDirectory: $dotnetRoot"
-    } else {
-        # Try common locations
-        $dotnetRoot = "C:\Program Files\dotnet"
-    }
-
-    if ($dotnetRoot -and (Test-Path "$dotnetRoot\shared\Microsoft.NETCore.App")) {
-        $net6Runtime = Get-ChildItem -Path "$dotnetRoot\shared\Microsoft.NETCore.App" -Directory -ErrorAction SilentlyContinue | 
-                       Where-Object { $_.Name -like "6.*" } | 
-                       Sort-Object Name -Descending | 
-                       Select-Object -First 1
-        
-        if ($net6Runtime) {
-            $env:TAEF_CoreCLR = $net6Runtime.FullName
-            Write-Host "Set TAEF_CoreCLR to: $($env:TAEF_CoreCLR)"
-        }
-    }
-
     $teLogFile = (Join-Path $env:Build_SourcesDirectory "BuildOutput\$Configuration\$Platform\Te.wtl")
     $teLogPathTo = (Join-Path $env:Build_SourcesDirectory "TestOutput\$Configuration\$Platform")
 
