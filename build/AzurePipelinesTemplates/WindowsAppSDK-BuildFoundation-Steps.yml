@@ -27,6 +27,13 @@ steps:
   parameters:
     IsOneBranch: ${{ parameters.IsOneBranch }}
 
+- task: PowerShell@2
+  displayName: 'Show folder tree'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
+    arguments: '-FolderPath "$(Build.SourcesDirectory)"'
+
 - task: NuGetAuthenticate@1
 
   # Copy MSIX license installation header into the correct source location.
@@ -73,6 +80,13 @@ steps:
   inputs:
     filePath: 'BuildAll.ps1'
     arguments: -Platform "$(buildPlatform)" -Configuration "$(buildConfiguration)" -AzureBuildStep "BuildFoundation" -WindowsAppSDKFoundationVersion "1.8.250722000-experimental"
+
+- task: PowerShell@2
+  displayName: 'Show folder tree'
+  inputs:
+    targetType: 'filePath'
+    filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
+    arguments: '-FolderPath "$(Build.SourcesDirectory)"'
 
 - ${{ if eq(parameters.runPREfast, 'true') }}:
   - task: SDLNativeRules@3
