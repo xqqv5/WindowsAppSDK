@@ -7,6 +7,11 @@
     <GenerateProjectSpecificOutputFolder>False</GenerateProjectSpecificOutputFolder>
     <Platforms>x86;x64;arm64</Platforms>
 
+    <!-- Map Platform to RuntimeIdentifier for self-contained deployment -->
+    <RuntimeIdentifier Condition="'$(Platform)' == 'x86'">win10-x86</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win10-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(Platform)' == 'arm64'">win10-arm64</RuntimeIdentifier>
+
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <WindowsAppSdkSelfContained>true</WindowsAppSdkSelfContained>
     <SelfContained>true</SelfContained>
