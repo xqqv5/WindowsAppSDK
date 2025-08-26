@@ -158,4 +158,4 @@ stages:
           callingStage: 'TestSampleApps'
           sampleFeatureAreasList: ${{ parameters.sampleFeatureAreasList }}
           IsOneBranch: ${{ parameters.IsOneBranch }}
-          TestMatrix: $[ variables.SampleAppsTests ]
+          TestMatrix: $[ variables.SampleAppsTestsArm64 ]
