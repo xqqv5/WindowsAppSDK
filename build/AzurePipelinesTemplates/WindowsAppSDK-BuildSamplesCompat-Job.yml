@@ -154,9 +154,9 @@ jobs:
       command: 'custom'
       arguments: >
         install "Microsoft.WindowsAppSDK"
-        -Source "https://api.nuget.org/v3/index.json"
+        -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
-        -Prerelease
+        -Version "1.8.250826001-experimental"
 
   # The environment variable VCToolsInstallDir isn't defined on lab machines, so we need to retrieve it ourselves.
   - script: |
