@@ -154,7 +154,7 @@ jobs:
       command: 'custom'
       arguments: >
         install "Microsoft.WindowsAppSDK"
-        -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+        -Source "https://api.nuget.org/v3/index.json"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
         -Prerelease
 
