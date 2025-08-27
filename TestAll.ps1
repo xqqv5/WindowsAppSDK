@@ -230,6 +230,9 @@ function Get-SystemInfo
     Write-Host "Powershell      : $($PSVersionTable.PSEdition) $($PSVersionTable.PSVersion)"
 }
 
+$env:Build_Platform = $Platform.ToLower()
+$env:Build_Configuration = $Configuration.ToLower()
+
 if ($ShowSystemInfo -eq $true)
 {
     Get-SystemInfo
