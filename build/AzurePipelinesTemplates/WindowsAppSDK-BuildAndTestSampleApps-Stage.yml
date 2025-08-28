@@ -75,6 +75,7 @@ stages:
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'
+    FoundationVersion: $[ stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'] ]
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
     parameters:
@@ -102,6 +103,7 @@ stages:
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'
+    FoundationVersion: $[ stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'] ]
   jobs:
   - template: WindowsAppSDK-BuildSamplesCompat-Job.yml
     parameters:
