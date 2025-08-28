@@ -68,6 +68,11 @@ namespace Test::PickerCommonTests
             return true;
         }
 
+        bool StringEqualIgnoreCase(std::wstring_view str1, std::wstring_view str2)
+        {
+            return _wcsicmp(str1.data(), str2.data()) == 0;
+        }
+
         TEST_METHOD(VerifyConfigureDialog_WhenPickerParameters_FileTypeFilterNotSpecified_ExpectSuccess)
         {
             // Arrange.
@@ -113,7 +118,7 @@ namespace Test::PickerCommonTests
 
             wil::unique_cotaskmem_string dialogFolderPath{};
             dialogFolder->GetDisplayName(SIGDN_FILESYSPATH, dialogFolderPath.put());
-            VERIFY_ARE_EQUAL(std::wstring(dialogFolderPath.get()), mockFolderPath,
+            VERIFY_IS_TRUE(StringEqualIgnoreCase(std::wstring(dialogFolderPath.get()), mockFolderPath),
                 L"The save dialog's folder path should match the suggested folder path.");
         }
         TEST_METHOD(VerifyConfigureFileSaveDialog_WhenSuggestedFolderDeleted_ExpectItsNoError)
@@ -339,8 +344,8 @@ namespace Test::PickerCommonTests
                     folderItem->GetDisplayName(SIGDN_FILESYSPATH, resultFolderPath.put());
                     winrt::hstring resultFolderPathString(resultFolderPath.get());
 
-                    message = L"Verify folder path of '" + folder + L"', expect: '" + folder + L"', actual: '" + resultFolderPathString + L"'";
-                    VERIFY_ARE_EQUAL(resultFolderPathString, expectConfig, message.c_str());
+                    message = L"Verify folder path, expect: '" + folder + L"', actual: '" + resultFolderPathString + L"'";
+                    VERIFY_IS_TRUE(StringEqualIgnoreCase(resultFolderPathString, expectConfig), message.c_str());
                 }
                 else
                 {

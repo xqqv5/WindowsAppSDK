@@ -333,20 +333,33 @@ namespace PickerCommon {
     }
 
     /// <summary>
-    /// Capture and processing pickers filter inputs and convert them into Common Item Dialog's accepting type, for FileSavePicker
+    /// Capture and processing pickers filter inputs and convert them into Common Item Dialog's accepting type.
     /// </summary>
     /// <param name="filters">winrt style filters</param>
-    void PickerParameters::CaptureFilterSpec(winrt::Windows::Foundation::Collections::IMapView<winrt::hstring, winrt::Windows::Foundation::Collections::IVector<hstring>> filters)
+    void PickerParameters::CaptureFilterSpec(
+        winrt::Windows::Foundation::Collections::IMapView<winrt::hstring, winrt::Windows::Foundation::Collections::IVector<hstring>> filters,
+        bool unionChoices)
     {
         size_t resultSize = filters.Size();
+        if (filters.Size() == 0 || unionChoices)
+        {
+            resultSize += 1; // extend one space for the 'All Files' category
+        }
+
         FileTypeFilterData.clear();
-        FileTypeFilterData.reserve(filters.Size() * static_cast<size_t>(2));
+        FileTypeFilterData.reserve(resultSize * 2);
+
+        winrt::Windows::Foundation::Collections::IVector<hstring> unionedExtensionVector;
 
         for (const auto& filter : filters)
         {
             FileTypeFilterData.push_back(filter.Key());
             auto extensionList = JoinExtensions(filter.Value().GetView());
             FileTypeFilterData.push_back(extensionList);
+            if (unionChoices)
+            {
+                unionedExtensionVector.Append(extensionList);
+            }
         }
 
         if (filters.Size() == 0)
@@ -354,7 +367,11 @@ namespace PickerCommon {
             // when filters not defined, set filter to All Files *.*
             FileTypeFilterData.push_back(AllFilesText);
             FileTypeFilterData.push_back(L"*");
-            resultSize = 1;
+        }
+        else if (unionChoices)
+        {
+            FileTypeFilterData.push_back(AllFilesText);
+            FileTypeFilterData.push_back(JoinExtensions(unionedExtensionVector.GetView()));
         }
 
         FileTypeFilterPara.clear();
@@ -365,6 +382,13 @@ namespace PickerCommon {
         }
     }
 
+    /// <summary>
+    /// Capture the file dialog filter data from FileTypeFilter and FileTypeChoices.
+    ///     Note that FileTypeChoices takes precedence over FileTypeFilter.
+    ///     And this method is specifically for FileOpenPicker, which has both properties.
+    /// </summary>
+    /// <param name="fileTypeFilterView"></param>
+    /// <param name="fileTypeChoicesView"></param>
     void PickerParameters::CaptureFilterSpecData(
         winrt::Windows::Foundation::Collections::IVectorView<winrt::hstring> fileTypeFilterView,
         winrt::Windows::Foundation::Collections::IMapView<winrt::hstring, winrt::Windows::Foundation::Collections::IVector<winrt::hstring>> fileTypeChoicesView)
