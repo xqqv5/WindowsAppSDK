@@ -81,9 +81,9 @@ jobs:
   - task: DownloadPackage@1
     displayName: 'Download Microsoft.WindowsAppSDK to get all its dependencies'
     inputs:
-      packageType: 'nuget'
+      packageType: 'NuGet'
       feed: 'ProjectReunion/Project.Reunion.nuget.internal'
-      definition: 'Microsoft.WindowsAppSDK.Foundation'
+      packageName: 'Microsoft.WindowsAppSDK.Foundation'
       version: '1.8.250708003-experimental'
       downloadPath: '$(Build.SourcesDirectory)\localpackages\NugetPackages'
 
