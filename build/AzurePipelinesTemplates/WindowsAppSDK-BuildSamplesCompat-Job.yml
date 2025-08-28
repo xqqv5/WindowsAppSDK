@@ -77,6 +77,25 @@ jobs:
   - checkout: self
   - checkout: WindowsAppSDKSamples
 
+    # ============================================================================== have a try ====================================================================================
+  - task: DownloadPackage@1
+    displayName: 'Download Microsoft.WindowsAppSDK to get all its dependencies'
+    inputs:
+      packageType: 'NuGet'
+      feed: 'ProjectReunion/Project.Reunion.nuget.internal'
+      packageName: 'Microsoft.WindowsAppSDK.Foundation'
+      version: '1.8.250708003-experimental'
+      downloadPath: '$(Build.SourcesDirectory)\localpackages\NugetPackages'
+
+  - task: PowerShell@2
+    displayName: 'Show folder tree'
+    inputs:
+      targetType: 'filePath'
+      filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\ShowFolderTree.ps1'
+      arguments: '-FolderPath "$(Build.SourcesDirectory)"'
+
+  # ============================================================================== end of try ====================================================================================
+
   # The MMS2022 image used to come with Windows SDK 10.0.22000, but not any more.
   - task: PowerShell@2
     displayName: 'Add Windows SDK 10.0.22000'
@@ -136,27 +155,27 @@ jobs:
   #       *.nupkg
   #     TargetFolder: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages'
 
-  # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies.
-  - task: NuGetCommand@2
-    inputs:
-      command: 'custom'
-      arguments: >
-        install "Microsoft.WindowsAppSDK.Foundation"
-        -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
-        -Version "1.8.250708003-experimental"
-        -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
-        -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+  # # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies.
+  # - task: NuGetCommand@2
+  #   inputs:
+  #     command: 'custom'
+  #     arguments: >
+  #       install "Microsoft.WindowsAppSDK.Foundation"
+  #       -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
+  #       -Version "1.8.250708003-experimental"
+  #       -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
+  #       -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
   
-  # Install Microsoft.WindowsAppSDK to get all its dependencies. 
-  # This task is only for temporary use, in ModifySampleAppsReferences.ps1 we will delete folder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK".
-  - task: NuGetCommand@2
-    inputs:
-      command: 'custom'
-      arguments: >
-        install "Microsoft.WindowsAppSDK"
-        -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
-        -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
-        -Version "1.8.250826001-experimental"
+  # # Install Microsoft.WindowsAppSDK to get all its dependencies. 
+  # # This task is only for temporary use, in ModifySampleAppsReferences.ps1 we will delete folder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK".
+  # - task: NuGetCommand@2
+  #   inputs:
+  #     command: 'custom'
+  #     arguments: >
+  #       install "Microsoft.WindowsAppSDK"
+  #       -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+  #       -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
+  #       -Version "1.8.250826001-experimental"
 
   # The environment variable VCToolsInstallDir isn't defined on lab machines, so we need to retrieve it ourselves.
   - script: |
