@@ -53,15 +53,6 @@ resources:
       ref: $(SamplesBranch)
 
 stages:
-- ${{ if eq( parameters.BuildSampleApps, true ) }}:
-  - template: AzurePipelinesTemplates\WindowsAppSDK-BuildAndTestSampleApps-Stage.yml@self
-    parameters:
-      IsOneBranch: false
-      TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
-      TestOnArm64: ${{ parameters.TestOnArm64 }}
-      runStaticAnalysis: ${{ parameters.runStaticAnalysis }}
-      maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
-      maxParallel_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}
 
 - template: AzurePipelinesTemplates\WindowsAppSDK-BuildInstaller-Stage.yml@self
 
@@ -75,13 +66,13 @@ stages:
     runPREFast: false
     testMatrix: ${{ variables.PipelineTests }}
 
-# - template: AzurePipelinesTemplates\WindowsAppSDK-Build-Stage.yml@self
-#   parameters:
-#     SignOutput: false
-#     IsOneBranch: false
-#     runApiScan: false
-#     runPREFast: true
-#     testMatrix: ${{ variables.PipelineTests }}
+- template: AzurePipelinesTemplates\WindowsAppSDK-Build-Stage.yml@self
+  parameters:
+    SignOutput: false
+    IsOneBranch: false
+    runApiScan: false
+    runPREFast: true
+    testMatrix: ${{ variables.PipelineTests }}
 
 - template: AzurePipelinesTemplates\WindowsAppSDK-Test-Stage.yml@self
 
@@ -90,3 +81,13 @@ stages:
     SignOutput: false
     PublishPackage: false
     IsOneBranch: false
+
+- ${{ if eq( parameters.BuildSampleApps, true ) }}:
+  - template: AzurePipelinesTemplates\WindowsAppSDK-BuildAndTestSampleApps-Stage.yml@self
+    parameters:
+      IsOneBranch: false
+      TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
+      TestOnArm64: ${{ parameters.TestOnArm64 }}
+      runStaticAnalysis: ${{ parameters.runStaticAnalysis }}
+      maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
+      maxParallel_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}
