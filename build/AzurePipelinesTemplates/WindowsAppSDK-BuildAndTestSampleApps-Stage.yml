@@ -71,7 +71,7 @@ parameters:
 
 stages:
 - stage: BuildSampleApps_x64
-  dependsOn: []
+  dependsOn: Pack
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'
