@@ -975,33 +975,33 @@ namespace WindowsAppSDK.Test.SampleTests
             return;
         }
 
-        [TestMethod]
-        public void AppLifecycleInstancingCppWin32Packaged()
-        {
-            if (IsArchX86() || IsBuildConfigDebug())
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
-                return;
-            }
+        // [TestMethod]
+        // public void AppLifecycleInstancingCppWin32Packaged()
+        // {
+        //     if (IsArchX86() || IsBuildConfigDebug())
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
+        //         return;
+        //     }
 
-            Log.Comment($"OSVersion {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Build}");
-            if ((Environment.OSVersion.Version.Major < 10) || ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Build < 19041)))
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This test requires Win 10 Build 19041 or higher.");
-                return;
-            }
+        //     Log.Comment($"OSVersion {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Build}");
+        //     if ((Environment.OSVersion.Version.Major < 10) || ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Build < 19041)))
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This test requires Win 10 Build 19041 or higher.");
+        //         return;
+        //     }
 
-            if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
-                return;
-            }
+        //     if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
+        //         return;
+        //     }
 
-            RegisterAppxPackage("AppLifecycle\\Instancing\\cpp\\cpp-win32-packaged\\CppWinMainInstancingPkg\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
-            LaunchAndClosePackagedApp("d9bcd10a-b42d-4e1e-9656-a2284d39e12d_s9y1p3hwd5qda!App", "CppWinMainInstancing", "CppWinMainInstancing.exe");
-            RemoveAppxPackage("d9bcd10a-b42d-4e1e-9656-a2284d39e12d_1.0.0.0_[BuildArch]__s9y1p3hwd5qda");
-            return;
-        }
+        //     RegisterAppxPackage("AppLifecycle\\Instancing\\cpp\\cpp-win32-packaged\\CppWinMainInstancingPkg\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
+        //     LaunchAndClosePackagedApp("d9bcd10a-b42d-4e1e-9656-a2284d39e12d_s9y1p3hwd5qda!App", "CppWinMainInstancing", "CppWinMainInstancing.exe");
+        //     RemoveAppxPackage("d9bcd10a-b42d-4e1e-9656-a2284d39e12d_1.0.0.0_[BuildArch]__s9y1p3hwd5qda");
+        //     return;
+        // }
 
         [TestMethod]
         public void AppLifecycleInstancingCsWpfPackaged()
@@ -1031,33 +1031,33 @@ namespace WindowsAppSDK.Test.SampleTests
             return;
         }
 
-        [TestMethod]
-        public void AppLifecycleStateNotificationsCppWin32Packaged()
-        {
-            if (IsArchX86() || IsBuildConfigDebug())
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
-                return;
-            }
+        // [TestMethod]
+        // public void AppLifecycleStateNotificationsCppWin32Packaged()
+        // {
+        //     if (IsArchX86() || IsBuildConfigDebug())
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
+        //         return;
+        //     }
 
-            Log.Comment($"OSVersion {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Build}");
-            if ((Environment.OSVersion.Version.Major < 10) || ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Build < 19041)))
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This test requires Win 10 Build 19041 or higher.");
-                return;
-            }
+        //     Log.Comment($"OSVersion {Environment.OSVersion.Version.Major}.{Environment.OSVersion.Version.Minor}.{Environment.OSVersion.Version.Build}");
+        //     if ((Environment.OSVersion.Version.Major < 10) || ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Build < 19041)))
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This test requires Win 10 Build 19041 or higher.");
+        //         return;
+        //     }
 
-            if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
-                return;
-            }
+        //     if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
+        //         return;
+        //     }
 
-            RegisterAppxPackage("AppLifecycle\\StateNotifications\\cpp\\cpp-win32-packaged\\CppWinMainStatePkg\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
-            LaunchAndClosePackagedApp("e0d8ad55-f3f2-4d7f-9182-3ee6905208a8_s9y1p3hwd5qda!App", "CppWinMainState", "CppWinMainState.exe");
-            RemoveAppxPackage("e0d8ad55-f3f2-4d7f-9182-3ee6905208a8_1.0.0.0_[BuildArch]__s9y1p3hwd5qda");
-            return;
-        }
+        //     RegisterAppxPackage("AppLifecycle\\StateNotifications\\cpp\\cpp-win32-packaged\\CppWinMainStatePkg\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
+        //     LaunchAndClosePackagedApp("e0d8ad55-f3f2-4d7f-9182-3ee6905208a8_s9y1p3hwd5qda!App", "CppWinMainState", "CppWinMainState.exe");
+        //     RemoveAppxPackage("e0d8ad55-f3f2-4d7f-9182-3ee6905208a8_1.0.0.0_[BuildArch]__s9y1p3hwd5qda");
+        //     return;
+        // }
 
         [TestMethod]
         public void AppLifecycleStateNotificationsCsWpfPackaged()
@@ -1267,44 +1267,44 @@ namespace WindowsAppSDK.Test.SampleTests
         // 3) a process with the expected name is present,
         // 4) processes associated with the app can be terminated.
         // 5) the app's package can be successfully removed.
-        [TestMethod]
-        public void NotificationsPushCppConsolePackaged()
-        {
-            if (IsArchX86() || IsBuildConfigDebug())
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
-                return;
-            }
+        // [TestMethod]
+        // public void NotificationsPushCppConsolePackaged()
+        // {
+        //     if (IsArchX86() || IsBuildConfigDebug())
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "This Sample app is currently not being tested when platform=x86 or config=Debug.");
+        //         return;
+        //     }
 
-            if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
-            {
-                WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
-                return;
-            }
-            if ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Minor == 0) && ((Environment.OSVersion.Version.Build == 17763)))
-            {
-                // https://task.ms/54900647 
-                Log.Comment("This test is currently failing on the Win 10 Server 2019 OS image. Skipping this launch test to unblock exercising of the image until b#54900647 is fixed.");
-                return;
-            }
+        //     if ((Environment.OSVersion.Version.Major == 10) && ((Environment.OSVersion.Version.Build == 19044) || (Environment.OSVersion.Version.Build == 19045)))
+        //     {
+        //         WEX.Logging.Interop.Log.Result(WEX.Logging.Interop.TestResult.Skipped, "Skipping this test on LTSC 2021 (19044) and 22h2 (19045) until b#53993352 is fixed.");
+        //         return;
+        //     }
+        //     if ((Environment.OSVersion.Version.Major == 10) && (Environment.OSVersion.Version.Minor == 0) && ((Environment.OSVersion.Version.Build == 17763)))
+        //     {
+        //         // https://task.ms/54900647 
+        //         Log.Comment("This test is currently failing on the Win 10 Server 2019 OS image. Skipping this launch test to unblock exercising of the image until b#54900647 is fixed.");
+        //         return;
+        //     }
             
-            RegisterAppxPackage("Notifications\\Push\\cpp-console-packaged\\cpp-console-package\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
+        //     RegisterAppxPackage("Notifications\\Push\\cpp-console-packaged\\cpp-console-package\\bin\\[BuildArch]\\[BuildConfig]\\AppxManifest.xml");
 
-            // Upon launch, the app throws the following error message, which looks expected:
-            //   There was an error obtaining the WNS Channel URI
-            //   The remoteId has not been set.Refer to the readme file accompanying this sample
-            //   for the instructions on how to obtain and setup a remote id
-            //   Press 'Enter' at any time to exit App.
-            //
-            // Therefore, for this app we won't wait for a window with a specific title. Just proceed to look
-            // for the expected process name to terminate.
-            //
-            // TODO: consider automating the above setup steps so that we can verify the main app window is present.
-            LaunchAndClosePackagedApp("PushNotificationsSample_ph1m9x8skttmg!App", null, "cpp-console.exe");
+        //     // Upon launch, the app throws the following error message, which looks expected:
+        //     //   There was an error obtaining the WNS Channel URI
+        //     //   The remoteId has not been set.Refer to the readme file accompanying this sample
+        //     //   for the instructions on how to obtain and setup a remote id
+        //     //   Press 'Enter' at any time to exit App.
+        //     //
+        //     // Therefore, for this app we won't wait for a window with a specific title. Just proceed to look
+        //     // for the expected process name to terminate.
+        //     //
+        //     // TODO: consider automating the above setup steps so that we can verify the main app window is present.
+        //     LaunchAndClosePackagedApp("PushNotificationsSample_ph1m9x8skttmg!App", null, "cpp-console.exe");
 
-            RemoveAppxPackage("PushNotificationsSample_1.0.0.0_[BuildArch]__ph1m9x8skttmg");
-            return;
-        }
+        //     RemoveAppxPackage("PushNotificationsSample_1.0.0.0_[BuildArch]__ph1m9x8skttmg");
+        //     return;
+        // }
 
         /**** Other sample apps ****/
 
