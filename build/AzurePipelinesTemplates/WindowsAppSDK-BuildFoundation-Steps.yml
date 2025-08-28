@@ -79,7 +79,7 @@ steps:
   name: BuildFoundation
   inputs:
     filePath: 'BuildAll.ps1'
-    arguments: -Platform "$(buildPlatform)" -Configuration "$(buildConfiguration)" -AzureBuildStep "BuildFoundation" -WindowsAppSDKFoundationVersion "1.8.250722000-experimental"
+    arguments: -Platform "$(buildPlatform)" -Configuration "$(buildConfiguration)" -AzureBuildStep "BuildFoundation" -WindowsAppSDKFoundationVersion "1.8.250825005-preview"
 
 - task: PowerShell@2
   displayName: 'Show folder tree'

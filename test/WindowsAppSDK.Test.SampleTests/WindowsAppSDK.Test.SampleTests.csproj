@@ -9,7 +9,7 @@
     
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <WindowsAppSdkSelfContained>true</WindowsAppSdkSelfContained>
-    <WindowsAppSDKFoundationPackageVersion Condition="'$(WindowsAppSDKFoundationPackageVersion)' == ''">1.8.250722000-experimental</WindowsAppSDKFoundationPackageVersion>
+    <WindowsAppSDKFoundationPackageVersion Condition="'$(WindowsAppSDKFoundationPackageVersion)' == ''">1.8.250825005-preview</WindowsAppSDKFoundationPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
