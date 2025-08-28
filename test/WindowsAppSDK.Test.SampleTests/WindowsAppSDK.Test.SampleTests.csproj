@@ -9,11 +9,11 @@
     
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <WindowsAppSdkSelfContained>true</WindowsAppSdkSelfContained>
-    <WindowsAppSDKFoundationPackageVersion Condition="'$(WindowsAppSDKFoundationPackageVersion)' == ''">1.8.250825005-preview</WindowsAppSDKFoundationPackageVersion>
+    <WindowsAppSDKFoundationPackageVersion Condition="'$(WindowsAppSDKFoundationPackageVersion)' == ''">1.8.250803001-preview</WindowsAppSDKFoundationPackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="$(WindowsAppSDKFoundationPackageVersion)" /> -->
+    <PackageReference Include="Microsoft.WindowsAppSDK.Foundation" Version="$(WindowsAppSDKFoundationPackageVersion)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
     <PackageReference Include="Microsoft.Taef" Version="10.75.221207001" />
     <PackageReference Include="Microsoft.Windows.Apps.Test" Version="1.0.181205002" />
