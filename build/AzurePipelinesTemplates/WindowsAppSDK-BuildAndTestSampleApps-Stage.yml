@@ -71,7 +71,7 @@ parameters:
 
 stages:
 - stage: BuildSampleApps_x64
-  dependsOn: []
+  dependsOn: Pack
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'
@@ -98,7 +98,7 @@ stages:
       maxParallel: ${{ parameters.maxParallel_x64 }}
 
 - stage: BuildSampleApps_arm64
-  dependsOn: []
+  dependsOn: Pack
   variables:
     SamplesRepoName: 'WindowsAppSDK-Samples'
     SelfRepoName: 'WindowsAppSDK'

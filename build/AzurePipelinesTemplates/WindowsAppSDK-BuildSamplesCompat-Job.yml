@@ -110,31 +110,20 @@ jobs:
         Write-Host "##vso[task.setvariable variable=featureForFilePath;isOutput=true]$tempFeature"
         Write-Host "##vso[task.setvariable variable=featureForFilePath;]$tempFeature"
 
-  # The following steps are used to prepare the environment for building Sample apps.
-  - powershell: |
-      $folderPath = "$(Build.SourcesDirectory)\localpackages\NugetPackages"
-      if (-not (Test-Path $folderPath)) {
-          New-Item -ItemType Directory -Path $folderPath | Out-Null
-          Write-Host "Folder created: $folderPath"
-      } else {
-          Write-Host "Folder already exists: $folderPath"
-      }
-    displayName: "Check and create folder for NuGet packages"
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download WindowsAppSDK.Foundation'
+    inputs:
+      artifactName: 'TransportPackage'
+      targetPath: '$(Build.SourcesDirectory)\TransportPackage'
 
-  # - task: DownloadPipelineArtifact@2
-  #   displayName: 'Download WindowsAppSDK'
-  #   inputs:
-  #     artifactName: 'WindowsAppSDK_Nuget_And_MSIX'
-  #     targetPath: '$(Build.SourcesDirectory)\localpackages'
-
-  # # Copy license installation header into the correct installer source location.
-  # - task: CopyFiles@2
-  #   displayName: 'Copy files to parent'
-  #   inputs:
-  #     SourceFolder: '$(Build.SourcesDirectory)\localpackages\NugetPackages'
-  #     Contents: |
-  #       *.nupkg
-  #     TargetFolder: '$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages'
+  # Copy WindowsAppSDK.Foundation to local package folder
+  - task: CopyFiles@2
+    displayName: 'Copy WindowsAppSDK.Foundation to local package folder'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\TransportPackage'
+      Contents: |
+        Microsoft.WindowsAppSDK.Foundation.[0-9]*.nupkg
+      TargetFolder: '$(Build.SourcesDirectory)\localpackages\NugetPackages'
 
   # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies.
   - task: NuGetCommand@2
@@ -143,7 +132,7 @@ jobs:
       arguments: >
         install "Microsoft.WindowsAppSDK.Foundation"
         -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
-        -Version "1.8.250825001-experimental"
+        -Version "$(stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'])"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
   
@@ -154,7 +143,7 @@ jobs:
       command: 'custom'
       arguments: >
         install "Microsoft.WindowsAppSDK"
-        -Source "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
+        -Source "https://api.nuget.org/v3/index.json"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
         -PreRelease
 
@@ -196,7 +185,7 @@ jobs:
       filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\test\ModifySampleAppsReferences.ps1'
       arguments: >
         -SampleRepoRoot "$(Build.SourcesDirectory)\$(SamplesRepoName)"
-        -FoundationVersion "1.8.250825001-experimental"
+        -FoundationVersion "$(stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'])"
         -FoundationPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -WASDKPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
   
