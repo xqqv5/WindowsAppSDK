@@ -26,7 +26,6 @@ Param(
     [string]$OutputDirectory = (Split-Path $MyInvocation.MyCommand.Path) + "\BuildOutput",
     [string]$PGOBuildMode = "Optimize",
     [string]$UpdateVersionDetailsPath = $null,
-    [string]$WindowsAppSDKFoundationVersion = "1.0.0",
     [switch]$Clean = $false
 )
 
@@ -180,8 +179,7 @@ Try {
                                 /p:PGOBuildMode=$PGOBuildMode `
                                 /p:WindowsAppSDKCleanIntermediateFiles=true `
                                 /p:AppxSymbolPackageEnabled=false `
-                                /p:WindowsAppSDKBuildPipeline=$WindowsAppSDKBuildPipeline `
-                                /p:WindowsAppSDKFoundationPackageVersion=$WindowsAppSDKFoundationVersion
+                                /p:WindowsAppSDKBuildPipeline=$WindowsAppSDKBuildPipeline
                 if ($lastexitcode -ne 0)
                 {
                     write-host "ERROR: msbuild.exe WindowsAppRuntime.sln FAILED."
