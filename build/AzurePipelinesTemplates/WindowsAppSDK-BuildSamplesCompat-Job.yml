@@ -132,7 +132,7 @@ jobs:
       arguments: >
         install "Microsoft.WindowsAppSDK.Foundation"
         -Source "$(Build.SourcesDirectory)\localpackages\NugetPackages"
-        -Version "$(stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'])"
+        -Version "$[ stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'] ]"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
   
@@ -185,7 +185,7 @@ jobs:
       filePath: '$(Build.SourcesDirectory)\$(SelfRepoName)\test\ModifySampleAppsReferences.ps1'
       arguments: >
         -SampleRepoRoot "$(Build.SourcesDirectory)\$(SamplesRepoName)"
-        -FoundationVersion "$(stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'])"
+        -FoundationVersion "$[ stageDependencies.Pack.NugetPackage.outputs['DetermineComponentNugetPackageVersion.componentPackageVersion'] ]"
         -FoundationPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -WASDKPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
   
