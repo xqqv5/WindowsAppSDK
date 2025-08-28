@@ -1525,20 +1525,5 @@
   "release_x86_Windows.Server.2019.DataCenter.zh-CN.Test::Decimal::Tests::DecimalTests::from_zstring_view_localename_system",
   "release_x86_Windows.Server.2019.DataCenter.zh-CN.Test::Decimal::Tests::DecimalTests::from_zwstring_view",
   "release_x86_Windows.Server.2019.DataCenter.zh-CN.Test::Decimal::Tests::DecimalTests::from_zwstring_view_invariant",
-  "release_x86_Windows.Server.2019.DataCenter.zh-CN.Test::Decimal::Tests::DecimalTests::from_zwstring_view_localename_system",
-  "release_x64_Windows.10.Enterprise.22h2.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleInstancingCppWin32Packaged",
-  "release_x64_Windows.10.Enterprise.22h2.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleStateNotificationsCppWin32Packaged",
-  "release_x64_Windows.10.Enterprise.22h2.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.NotificationsPushCppConsolePackaged",
-  "release_x64_Windows.11.Professional.23H2.zh-CN.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleInstancingCppWin32Packaged",
-  "release_x64_Windows.11.Professional.23H2.zh-CN.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleStateNotificationsCppWin32Packaged",
-  "release_x64_Windows.11.Professional.23H2.zh-CN.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.NotificationsPushCppConsolePackaged",
-  "release_arm64_Windows.11.Professional.23h2.Arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleInstancingCppWin32Packaged",
-  "release_arm64_Windows.11.Professional.23h2.Arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleStateNotificationsCppWin32Packaged",
-  "release_arm64_Windows.11.Professional.23h2.Arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.NotificationsPushCppConsolePackaged",
-  "release_arm64_Windows.11.Enterprise.22h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleInstancingCppWin32Packaged",
-  "release_arm64_Windows.11.Enterprise.22h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleStateNotificationsCppWin32Packaged",
-  "release_arm64_Windows.11.Enterprise.22h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.NotificationsPushCppConsolePackaged",
-  "release_arm64_Windows.11.Enterprise.23h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleInstancingCppWin32Packaged",
-  "release_arm64_Windows.11.Enterprise.23h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.AppLifecycleStateNotificationsCppWin32Packaged",
-  "release_arm64_Windows.11.Enterprise.23h2.arm64.WindowsAppSDK.Test.SampleTests.WindowsAppSDKSampleAppTests.NotificationsPushCppConsolePackaged"
+  "release_x86_Windows.Server.2019.DataCenter.zh-CN.Test::Decimal::Tests::DecimalTests::from_zwstring_view_localename_system"
 ]
