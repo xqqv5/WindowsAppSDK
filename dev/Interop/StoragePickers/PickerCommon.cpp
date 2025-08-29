@@ -349,7 +349,7 @@ namespace PickerCommon {
         FileTypeFilterData.clear();
         FileTypeFilterData.reserve(resultSize * 2);
 
-        winrt::Windows::Foundation::Collections::IVector<hstring> unionedExtensionVector;
+        winrt::Windows::Foundation::Collections::IVector<hstring> unionedExtensionVector{ single_threaded_vector<hstring>() };
 
         for (const auto& filter : filters)
         {
@@ -370,6 +370,7 @@ namespace PickerCommon {
         }
         else if (unionChoices)
         {
+            // when filters not defined, "All files" category is the union of all extensions defined in FileTypeChoices
             FileTypeFilterData.push_back(AllFilesText);
             FileTypeFilterData.push_back(JoinExtensions(unionedExtensionVector.GetView()));
         }
