@@ -125,7 +125,7 @@ jobs:
         Microsoft.WindowsAppSDK.Foundation.[0-9]*.nupkg
       TargetFolder: '$(Build.SourcesDirectory)\localpackages\NugetPackages'
 
-  # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies.
+  # Install Microsoft.WindowsAppSDK.Foundation to get all its dependencies and their version.
   - task: NuGetCommand@2
     inputs:
       command: 'custom'
@@ -135,17 +135,6 @@ jobs:
         -Version "$(FoundationVersion)"
         -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -FallbackSource "https://microsoft.pkgs.visualstudio.com/ProjectReunion/_packaging/Project.Reunion.nuget.internal/nuget/v3/index.json"
-  
-  # Install Microsoft.WindowsAppSDK to get all its dependencies. 
-  # This task is only for temporary use, in ModifySampleAppsReferences.ps1 we will delete folder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK".
-  - task: NuGetCommand@2
-    inputs:
-      command: 'custom'
-      arguments: >
-        install "Microsoft.WindowsAppSDK"
-        -Source "https://api.nuget.org/v3/index.json"
-        -OutputDirectory "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
-        -PreRelease
 
   # The environment variable VCToolsInstallDir isn't defined on lab machines, so we need to retrieve it ourselves.
   - script: |

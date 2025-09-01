@@ -2,15 +2,24 @@
 Param(
     [string]$SampleRepoRoot = "",
     [string]$FoundationVersion = "",
-    [string]$FoundationPackagesFolder = "",
-    [string]$WASDKPackagesFolder = ""
+    [string]$FoundationPackagesFolder = ""
 )
 
-# First, add the metapackage Microsoft.WindowsAppSDK.Foundation
+# List all packages that need to be removed because they are dependencies of Microsoft.WindowsAppSDK but not of Microsoft.WindowsAppSDK.Foundation
+$packagesToRemove = @(
+    "Microsoft.WindowsAppSDK",
+    "Microsoft.Web.WebView2",
+    "Microsoft.WindowsAppSDK.AI",
+    "Microsoft.WindowsAppSDK.DWrite",
+    "Microsoft.WindowsAppSDK.Runtime",
+    "Microsoft.WindowsAppSDK.Widgets",
+    "Microsoft.WindowsAppSDK.WinUI",
+    "Microsoft.WindowsAppSDK.ML"
+)
+
 $nugetPackageToVersionTable = @{"Microsoft.WindowsAppSDK.Foundation" = $FoundationVersion}
 
-# Second, if the nuget packages folder is specified containing the latest versions,
-# go through them to get the versions of all dependency packages.
+# Go through the nuget packages folder to get the versions of all dependency packages.
 if (!($FoundationPackagesFolder -eq ""))
 {
     Get-ChildItem $FoundationPackagesFolder | 
@@ -28,42 +37,6 @@ if (!($FoundationPackagesFolder -eq ""))
     }
 }
 Write-Host "NuGet packages to version table: $($nugetPackageToVersionTable | Out-String)"
-
-# Third, get the Microsoft.WindowsAppSDK and its dependencies
-$wasdkDependencies = @("Microsoft.WindowsAppSDK")
-if (!($WASDKPackagesFolder -eq ""))
-{
-    Get-ChildItem $WASDKPackagesFolder | 
-    Where-Object { $_.Name -like "Microsoft.WindowsAppSDK.*" -or 
-                   $_.Name -like "Microsoft.Windows.SDK.BuildTools.*" -or 
-                   $_.Name -like "Microsoft.Web.WebView2.*" } | 
-    Where-Object { $_.Name -notlike "*.nupkg" } |
-    ForEach-Object { 
-        if ($_.Name -match "^(Microsoft\.WindowsAppSDK\.[a-zA-Z]+)\.([0-9].*)$" -or
-            $_.Name -match "^(Microsoft\.Windows\.SDK\.BuildTools\.MSIX)\.([0-9].*)$" -or
-            $_.Name -match "^(Microsoft\.Windows\.SDK\.BuildTools)\.([0-9].*)$" -or
-            $_.Name -match "^(Microsoft\.Web\.WebView2)\.([0-9].*)$")
-        {
-            $wasdkDependencies += $Matches[1]
-            Write-Host "Found $($Matches[1])"
-        } 
-    }
-
-    Remove-Item -Path $WASDKPackagesFolder -Recurse -Force
-    Write-Host "Deleted WASDK packages folder: $WASDKPackagesFolder"
-}
-Write-Host "WindowsAppSDK dependencies: $($wasdkDependencies | Out-String)"
-
-# Finally, get the packages to remove
-$packagesToRemove = @()
-foreach ($package in $wasdkDependencies)
-{
-    if (!$nugetPackageToVersionTable.ContainsKey($package))
-    {
-        $packagesToRemove += $package
-    }
-}
-Write-Host "Packages to remove: $($packagesToRemove | Out-String)"
 
 Get-ChildItem -Recurse packages.config -Path $SampleRepoRoot | foreach-object {
     $content = Get-Content $_.FullName -Raw
