@@ -22,24 +22,11 @@ parameters:
   - name: maxParallel_arm64
     type: number
     default: 10
-  # Each featureArea listed below is being built by a separate job agent, producing one corresponding test artifact.
-  # Because large artifacts (e.g., 5+GB) seems to hit "Out of Memory" error more frequently during artifact download, we sometimes
-  # split one featureArea artifact into smaller artifacts, usually <featureArea-A>-cs to group C# sample apps into one artifact,
-  # and <featureArea-A>-cpp to group C++ sample apps into another artifact. When a *-cs artifact is still too big, we then
-  # split it further using the pattern *-cs,  *-cs1, *-cs2, etc.
-  # As soon as large artifacts are no longer hitting the "Out of Memory" error during download, we can recombine all
-  # <featureArea-A>-* artifacts into a single large <featureArea-A> artifact.
-  # See the comment block below where these groups are being used.
+  # sampleFeatureAreasList param have the same naming rule and pattern as Aggregator repo: 
+  # https://microsoft.visualstudio.com/ProjectReunion/_git/WindowsAppSDKAggregator?path=/build/AzurePipelinesTemplates/WindowsAppSDK-BuildWindowsAppSDK-Stages.yml
   - name: "sampleFeatureAreasList"
     type: object
     default:
-      # These featureAreas are currently being built for [x64 | arm64] x [Release | Debug].
-      # WindowsAppSDK-BuildSamplesCompat-Job.yml uses these feature area names in both file paths and artifact names.
-      # But '\' is invalid in artifact names. Therefore, using '-' in instead of '\' here, and convert '-' to '\' when
-      # we need to use the feature name in file paths later. For instance:
-      # We use "AppLifecycle-EnvironmentVariables" to construct file path "<SamplesRepoName>\Samples\AppLifecycle\EnvironmentVariables\<sample app folder>".
-      # If there is a '-' in the directory name, such as "WindowsAIFoundry\cs-winui", the hyphen can be escaped
-      # by doubling it up as "--".
       SamplesCompatTest:
       - 'Installer'
       - 'Unpackaged'
@@ -87,12 +74,8 @@ stages:
       - 'Debug'
       BuildPlatform:
       - 'x64'
-      # Specify a valid sample artifact name to trigger publishing if we will run SampleTests in any stage; otherwise,
-      # specify an invalid artifact name to skip publishing.
-      # ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), eq(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
       ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), false) }}:
         SamplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_x64
-      # ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), ne(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
       ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), true) }}:
         SamplesArtifactName: ''
       runStaticAnalysis : ${{ parameters.runStaticAnalysis }}
@@ -115,12 +98,8 @@ stages:
       - 'Debug'
       BuildPlatform:
       - 'arm64'
-      # Specify a valid sample artifact name to trigger publishing if we will run SampleTests in any stage; otherwise,
-      # specify an invalid artifact name to skip publishing.
-      # ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), eq(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
       ${{ if or(eq(parameters.TestSampleAppsAfterBuildStage, 'true'), false) }}:
         SamplesArtifactName: ${{ parameters.SamplesBuildOutputArtifactName }}_arm64
-      # ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), ne(parameters.TestSampleAppsInPipelineTestStage, 'true')) }}:
       ${{ if and(ne(parameters.TestSampleAppsAfterBuildStage, 'true'), true) }}:
         SamplesArtifactName: ''
       runStaticAnalysis : ${{ parameters.runStaticAnalysis }}

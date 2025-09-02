@@ -1,14 +1,5 @@
-# Job template for building Samples app.
-# This template is currently being used to test build compatibility in previous release's build samples
-# Requirements:
-# A link to the repository is required in the root yml file like below
-# - repository: WindowsAppSDKSamples
-#   type: github
-#   endpoint: 'GitHub - benkuhn - 2-18'
-#   name: microsoft/WindowsAppSDK-Samples
-#   ref: $(SamplesBranch)
-# $(SamplesBranch) is the release branch
-# and is set in build\AzurePipelinesTemplates\WindowsAppSDK-CommonVariables.yml
+# This yml file is used to build sample apps, having the same structure and pattern as Aggregator repo:
+# https://microsoft.visualstudio.com/ProjectReunion/_git/WindowsAppSDKAggregator?path=/build/AzurePipelinesTemplates/WindowsAppSDK-BuildSamplesCompat-Job.yml
 parameters:
 - name: "IsOneBranch"
   type: boolean
@@ -77,7 +68,6 @@ jobs:
   - checkout: self
   - checkout: WindowsAppSDKSamples
 
-  # The MMS2022 image used to come with Windows SDK 10.0.22000, but not any more.
   - task: PowerShell@2
     displayName: 'Add Windows SDK 10.0.22000'
     env:
@@ -178,7 +168,7 @@ jobs:
         -FoundationPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages"
         -WASDKPackagesFolder "$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\localpackages\WASDK"
   
-  # this task is used to update the nuget.config file to point to the internal feed
+  # update the nuget.config file to point to the internal feed
   - powershell: |
       $nugetConfigPath = "$(Build.SourcesDirectory)/$(SamplesRepoName)/Samples/nuget.config"
   
@@ -216,22 +206,21 @@ jobs:
       restoreSolution: '.\$(SamplesRepoName)\Samples\$(featureForFilePath)\**\*.sln'
       includeNuGetOrg: false
 
-  # - task: CopyFiles@2
-  #   displayName: 'Copy tsaoptions.json from under ~\WindowsAppSDKAggregator\.config to ~\.config for the TSAOption task to find'
-  #   inputs:
-  #     SourceFolder: '$(Build.SourcesDirectory)\$(Build.Repository.Name)\.config'
-  #     Contents: |
-  #       tsaoptions.json
-  #       PoliCheckExclusions.xml
-  #     TargetFolder: '$(Build.SourcesDirectory)\.config'
+  - task: CopyFiles@2
+    displayName: 'Copy tsaoptions.json from under ~\WindowsAppSDKAggregator\.config to ~\.config for the TSAOption task to find'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\$(SelfRepoName)\.config'
+      Contents: |
+        tsaoptions.json
+      TargetFolder: '$(Build.SourcesDirectory)\.config'
 
-  # - task: CopyFiles@2
-  #   displayName: 'Copy OneBranch.gdnsuppress from under ~\WindowsAppSDKAggregator\.gdn to ~\.gdn for the Guardian: Post Analysis task to find'
-  #   inputs:
-  #     SourceFolder: '$(Build.SourcesDirectory)\$(Build.Repository.Name)\.gdn'
-  #     Contents: |
-  #       OneBranch.gdnsuppress
-  #     TargetFolder: '$(Build.SourcesDirectory)\.gdn'
+  - task: CopyFiles@2
+    displayName: 'Copy OneBranch.gdnsuppress from under ~\WindowsAppSDKAggregator\.gdn to ~\.gdn for the Guardian: Post Analysis task to find'
+    inputs:
+      SourceFolder: '$(Build.SourcesDirectory)\$(SelfRepoName)\.gdn'
+      Contents: |
+        OneBranch.gdnsuppress
+      TargetFolder: '$(Build.SourcesDirectory)\.gdn'
 
   - ${{ each config in parameters.BuildConfig }}:
     - ${{ each platform in parameters.BuildPlatform }}:
@@ -241,8 +230,7 @@ jobs:
           solution: .\$(SamplesRepoName)\Samples\$(featureForFilePath)\**\*.sln
           platform: '${{ platform }}'
           configuration: '${{ config }}'
-          # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-          msbuildArgs: '/t:restore /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:PublishReadyToRun=true /p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger:$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\$(feature).restore.${{ platform }}.${{ config }}.binlog'
+          msbuildArgs: '/t:restore /p:PublishReadyToRun=true /p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger:$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\$(feature).restore.${{ platform }}.${{ config }}.binlog'
           ${{ if and(eq( parameters.EnablePREFast, 'true'), eq(parameters.RunSDLBinaryAnalysis, 'true')) }}:
             # This property should match that of 'Build all Sample solutions' below. Otherwise, tool
             # architecture detection in the PreFast task may (incorrectly) choose the tool architecture
@@ -258,8 +246,7 @@ jobs:
           solution: .\$(SamplesRepoName)\Samples\$(featureForFilePath)\**\*.sln
           platform: '${{ platform }}'
           configuration: '${{ config }}'
-          # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-          msbuildArgs: '/p:WindowsAppSDKVerifyTransitiveDependencies=false /p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger:$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\$(feature).build.${{ platform }}.${{ config }}.binlog'
+          msbuildArgs: '/p:VCToolsInstallDir="$(VCToolsInstallDir)\" /p:RestoreAdditionalProjectSources="$(Build.SourcesDirectory)\localpackages\NugetPackages" /binaryLogger:$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\$(feature).build.${{ platform }}.${{ config }}.binlog'
           ${{ if and(eq( parameters.EnablePREFast, 'true'), eq(parameters.RunSDLBinaryAnalysis, 'true')) }}:
             # This property helps prevent tool architecture detection in the PreFast task to pick x86 (default)
             # as the "preferred tool architecture", which results in multiple sample apps failing to build due
@@ -286,33 +273,13 @@ jobs:
         # Given those challenges and that we currently prioritize Sample code over Product code, in this first round we just pick a few a Sample apps to PREFast scan them.
         # In the future, considering the long time required to scan the Sample apps, it might make more sense to create a separate weekly pipeline to PREFast scan the Sample
         # apps, for instance.
-        # - task: SDLNativeRules@3
-        #   displayName: PREfast SDL Native Rules for PhotoEditor
-        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'PhotoEditor'))
-        #   inputs:
-        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-        #     msBuildArchitecture: amd64
-        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui\PhotoEditor.sln'
-        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-        #     excludedPaths: |
-        #       $(Build.SourcesDirectory)\packages
-        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-        #     rulesetName: Custom
-        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-        #     policyName: 'WindowsUndocked'
-        #   continueOnError: true
-        #   env:
-        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-
         - task: SDLNativeRules@3
           displayName: PREfast SDL Native Rules for AppLifecycle\Activation\cpp
-          condition: and(succeeded(), eq(variables['featureForFilePath'], 'AppLifecycle\Activation\cpp'))
+          condition: and(succeeded(), eq(variables['featureForFilePath'], 'AppLifecycle\Activation\cpp\cpp-console-unpackaged'))
           inputs:
             setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
             msBuildArchitecture: amd64
-            # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-            msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-console-unpackaged\CppWinRtConsoleActivation.sln'
+            msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\CppWinRtConsoleActivation.sln'
             # Generally speaking, we leave it to the external repos to scan the bits in their packages.
             excludedPaths: |
               $(Build.SourcesDirectory)\packages
@@ -323,45 +290,6 @@ jobs:
           continueOnError: true
           env:
             SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-
-        # PREFast currently reports no issue for this .sln file, so this is a nice baseline to have.
-        # - task: SDLNativeRules@3
-        #   displayName: PREfast SDL Native Rules for AppLifecycle\Activation\cs2
-        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'AppLifecycle\Activation\cs2'))
-        #   inputs:
-        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-        #     msBuildArchitecture: amd64
-        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cs-winui-packaged\CsWinUiDesktopActivation.sln'
-        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-        #     excludedPaths: |
-        #       $(Build.SourcesDirectory)\packages
-        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-        #     rulesetName: Custom
-        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-        #     policyName: 'WindowsUndocked'
-        #   continueOnError: true
-        #   env:
-        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-
-        # - task: SDLNativeRules@3
-        #   displayName: PREfast SDL Native Rules for SelfContainedDeployment\cpp
-        #   condition: and(succeeded(), eq(variables['featureForFilePath'], 'SelfContainedDeployment\cpp'))
-        #   inputs:
-        #     setupCommandlines: '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Common7\Tools\VsMSBuildCmd.bat"'
-        #     msBuildArchitecture: amd64
-        #     # WindowsAppSDKVerifyTransitiveDependencies=false is a workaround until we have a complete metapackage (ML)
-        #     msBuildCommandline: 'msbuild.exe /nologo /nr:false /p:WindowsAppSDKVerifyTransitiveDependencies=false /p:configuration=${{ config }} /p:platform=${{ platform }} $(Build.SourcesDirectory)\$(SamplesRepoName)\Samples\$(featureForFilePath)\cpp-winui-packaged\SelfContainedDeployment.sln'
-        #     # Generally speaking, we leave it to the external repos to scan the bits in their packages.
-        #     excludedPaths: |
-        #       $(Build.SourcesDirectory)\packages
-        #     # Explicitly specify the EO-compliant rule set, as the default Sdl.Recommended.Warning.ruleset is not EO-compliant.
-        #     rulesetName: Custom
-        #     customRuleset: $(Agent.ToolsDirectory)\NativeCompilerStaticAnalysisRuleset\mandatory_to_fix.ruleset
-        #     policyName: 'WindowsUndocked'
-        #   continueOnError: true
-        #   env:
-        #     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
 
   - task: PowerShell@2
     displayName: Display storage and diagnostic info

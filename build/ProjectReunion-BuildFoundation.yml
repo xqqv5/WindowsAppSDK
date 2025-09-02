@@ -26,8 +26,8 @@ parameters:
   displayName: "Maximum number of parallel runs for Samples Compat Tests on platform arm64"
   type: number
   default: 13     # comparing with Nightly and Official build, PR build may have several build running at same time. Need to reduce max parallel to avoid exceeding
-- name: runStaticAnalysis
-  displayName: "Run Static Analysis (e.g., PREFast, APIScan)"
+- name: runStaticAnalysisInBuildAndTestSampleApps
+  displayName: "Run Static Analysis (e.g., PREFast, APIScan) In BuildAndTestSampleApps Stage"
   type: boolean
   default: false
 
@@ -88,6 +88,6 @@ stages:
       IsOneBranch: false
       TestSampleAppsAfterBuildStage: ${{ parameters.TestSampleAppsAfterBuildStage }}
       TestOnArm64: ${{ parameters.TestOnArm64 }}
-      runStaticAnalysis: ${{ parameters.runStaticAnalysis }}
+      runStaticAnalysis: ${{ parameters.runStaticAnalysisInBuildAndTestSampleApps }}
       maxParallel_x64: ${{ parameters.maxParallelForBuildSamplesCompatJob_x64 }}
       maxParallel_arm64: ${{ parameters.maxParallelForBuildSamplesCompatJob_arm64 }}

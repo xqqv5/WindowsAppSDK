@@ -46,13 +46,6 @@ steps:
       SourceFolder: '$(Build.SourcesDirectory)\BuildOutput\redist'
       TargetFolder: '$(Build.SourcesDirectory)\redist'
 
-  - task: PowerShell@2
-    displayName: 'Show folder tree'
-    inputs:
-      targetType: 'filePath'
-      filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
-      arguments: '-FolderPath "$(Build.SourcesDirectory)"'
-
   - task: powerShell@2
     displayName: 'Enable developer mode'
     inputs:
@@ -173,13 +166,6 @@ steps:
           Write-Host "##vso[task.setvariable variable=SAMPLES_ROOT_PATH;isOutput=true]$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples"
           Write-Host "##vso[task.setvariable variable=SAMPLES_ROOT_PATH;]$(Build.SourcesDirectory)\$(SamplesRepoName)\Samples"
 
-  - task: PowerShell@2
-    displayName: 'Show folder tree'
-    inputs:
-      targetType: 'filePath'
-      filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
-      arguments: '-FolderPath "$(Build.SourcesDirectory)"'
-
   - task: VisualStudioTestPlatformInstaller@1
     inputs:
       versionSelector: latestStable
@@ -248,13 +234,6 @@ steps:
         SourceFolder: '$(Build.SourcesDirectory)\BuildOutput\$(buildConfiguration)\$(buildPlatform)\WindowsAppSDK.Test.NetCore\net6'
         TargetFolder: '$(Build.SourcesDirectory)\BuildOutput\$(buildConfiguration)\$(buildPlatform)\WindowsAppSDK.Test.SampleTests\net6'
         Contents: '**'
-
-  - task: PowerShell@2
-    displayName: 'Show folder tree'
-    inputs:
-      targetType: 'filePath'
-      filePath: '$(Build.SourcesDirectory)\Show-FolderTree.ps1'
-      arguments: '-FolderPath "$(Build.SourcesDirectory)"'
 
   - task: PowerShell@2
     displayName: 'Run TAEF Tests'
